@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, testing commit/push!");
+            Console.CursorVisible = false;
+            Menu.Start();
         }
     }
 }
