@@ -20,8 +20,8 @@ namespace WeatherData
 
         private static void RunMainMenu()
         {
-            string[] options = { "Inside", "Outside", "Exit" };
-            Menu mainMenu = new Menu(options);
+            var mainMenuEnums = (Enum.GetNames(typeof(Enums.MainMenu)));
+            Menu mainMenu = new Menu(mainMenuEnums);
             int selectedIndex = mainMenu.Run();
 
             switch (selectedIndex)
@@ -39,8 +39,8 @@ namespace WeatherData
         }
         public static void RunInsideMenu()
         {
-            string[] options = { "Sök datum för att se medeltemp", "varmt till kallt", "torrt till fuktigast", "mögel", "Go to previous" };
-            Menu insideMenu = new Menu(options);
+            var InsideMenuEnums = (Enum.GetNames(typeof(Enums.InsideMenu)));
+            Menu insideMenu = new Menu(InsideMenuEnums);
             int selectedIndex = insideMenu.Run();
 
             switch (selectedIndex)
@@ -59,14 +59,14 @@ namespace WeatherData
                     Console.WriteLine("Sortering av minst till störst risk av mögel");
                     break;
                 case 4:
-                    Console.WriteLine("Go to previous");
+                    RunMainMenu();
                     break;
             }
         }
         public static void RunOutsideMenu()
         {
-            string[] options = { "Sök datum för att se medeltemp", "varmt till kallt", "torrt till fuktigast", "mögel", "Datum för meteorologisk höst", "Datum för meteorologisk vinter (OBS Mild vinter!)", "Go to previous" };
-            Menu outsideMenu = new Menu(options);
+            var outsideMenuEnums = (Enum.GetNames(typeof(Enums.OutsideMenu)));
+            Menu outsideMenu = new Menu(outsideMenuEnums);
             int selectedIndex = outsideMenu.Run();
 
             switch (selectedIndex)
@@ -90,11 +90,10 @@ namespace WeatherData
                     Console.WriteLine("Datum för meteorologisk vinter(OBS Mild vinter!)");
                     break;
                 case 6:
-                    Console.WriteLine("Go to previous");
+                    RunMainMenu();
                     break;
             }
         }
-
         public static void Start()
         {
             RunMainMenu();
@@ -103,7 +102,7 @@ namespace WeatherData
         {
             for (int i = 0; i < Options.Length; i++)
             {
-                string currentOption = Options[i];
+                string currentOption = Options[i].Replace("_", " ");
                 string prefix;
 
                 if (i == SelectedIndex)
