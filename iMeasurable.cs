@@ -27,7 +27,7 @@ namespace WeatherData
 
             public static void ConvertToBajs()
             {
-                Helpers.ExtractDataFromFile();
+
             }
         }
 
