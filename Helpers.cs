@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WeatherData.Data;
 
@@ -25,41 +26,126 @@ namespace WeatherData
             return lines;
         }
 
-        public static List<FileData> ReadTextFile(string filePath)
-        {
-            List<FileData> files = new List<FileData>();
+        //public static List<FileData> ReadTextFile(string filePath)
+        //{
+        //    List<FileData> files = new List<FileData>();
 
-            using (StreamReader reader = new StreamReader(filePath))
+        //    using (StreamReader reader = new StreamReader(filePath))
+        //    {
+        //        while (!reader.EndOfStream)
+        //        {
+        //            string line = reader.ReadLine();
+        //            string[] parts = line.Split(' ', ',', ':', '-');
+        //            int year = int.Parse(parts[0]);
+        //            int month = int.Parse(parts[1]);
+        //            int day = int.Parse(parts[2]);
+        //            int hour = int.Parse(parts[3]);
+        //            int minute = int.Parse(parts[4]);
+        //            int second = int.Parse(parts[5]);
+        //            string location = parts[6];
+        //            string temperature = parts[7];
+        //            string humidity = parts[8].Replace(".", "");
+        //            int humidityInt = Convert.ToInt32(humidity);
+
+        //            if (year == 2016 && month == 05 || year == 2017)
+        //            {
+
+        //            }
+        //            else
+        //            {
+        //                files.Add(new FileData(year, month, day, hour, minute, second, location, temperature, humidityInt));
+        //            }
+
+
+        //        }
+
+        //    }
+        //    return files;
+        //} 
+        public static List<FileData> ReadTextFile2(string filePath)
+        {
+            List<FileData> logs = new List<FileData>();
+            try
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        Match match = Regex.Match(line, @"(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2}),(.+),(\d+.\d+),(\d+)");
+
+                        if (match.Success)
+                        {
+                            try
+                            {
+
+                                DateTime date = DateTime.ParseExact(match.Groups[1].Value + "-" + match.Groups[2].Value + "-" + match.Groups[3].Value + " " + match.Groups[4].Value + ":" + match.Groups[5].Value + ":" + match.Groups[6].Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                                string location = match.Groups[7].Value;
+                                double temperature = double.Parse(match.Groups[8].Value);
+                                int humidity = int.Parse(match.Groups[9].Value);
+
+                                FileData fileData = new FileData(location, temperature, humidity, date);
+                                logs.Add(fileData);
+                            }
+                            catch (FormatException e)
+                            {
+                                Console.WriteLine("Error parsing line: " + line);
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error reading file: " + e.Message);
+            }
+            return logs;
+        }
+        private static FileData TryParseLine(string line)
+        {
+            Match match = Regex.Match(line, @"^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2}) (?<location>(inne|ute)) (?<temp>-?\d+(?:\.\d+)?) (?<humidity>\d+(?:\.\d+)?)");
+            if (!match.Success)
+            {
+                return null;
+            }
+
+            int year = int.Parse(match.Groups["year"].Value);
+            int month = int.Parse(match.Groups["month"].Value);
+            int day = int.Parse(match.Groups["day"].Value);
+            int hour = int.Parse(match.Groups["hour"].Value);
+            int minute = int.Parse(match.Groups["minute"].Value);
+            int second = int.Parse(match.Groups["second"].Value);
+            string location = match.Groups["location"].Value;
+            double temperature = double.Parse(match.Groups["temp"].Value);
+            int humidity = int.Parse(match.Groups["humidity"].Value);
+
+            try
+            {
+                DateTime dateTime = new DateTime(year, month, day, hour, minute, second);
+                return new FileData(location, temperature, humidity, dateTime);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+        }
+        public static List<FileData> ReadTextFile3(string filePath)
+        {
+            List<FileData> logs = new List<FileData>();
+            using (var reader = new StreamReader(filePath))
             {
                 while (!reader.EndOfStream)
                 {
                     string line = reader.ReadLine();
-                    string[] parts = line.Split(' ', ',', ':', '-');
-                    int year = int.Parse(parts[0]);
-                    int month = int.Parse(parts[1]);
-                    int day = int.Parse(parts[2]);
-                    int hour = int.Parse(parts[3]);
-                    int minute = int.Parse(parts[4]);
-                    int second = int.Parse(parts[5]);
-                    string location = parts[6];
-                    string temperature = parts[7];
-                    string humidity = parts[8].Replace(".", "");
-                    int humidityInt = Convert.ToInt32(humidity);
-
-                    if (year == 2016 && month == 05 || year == 2017)
+                    FileData log = TryParseLine(line);
+                    if (log != null)
                     {
-                        
+                        logs.Add(log);
                     }
-                    else
-                    {
-                        files.Add(new FileData(year, month, day, hour, minute, second, location, temperature, humidityInt));
-                    }
-
-
                 }
-
             }
-            return files;
+            return logs;
         }
 
         //SORTERINGSMETODER
