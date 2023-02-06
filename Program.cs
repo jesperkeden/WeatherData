@@ -12,7 +12,9 @@ namespace WeatherData
             //Menu.Start();
 
             //TESTER
-            Helpers.ReadTextFile2(filePath);
+            //Helpers.ReadTextFile(filePath);
+            //Test();
+            //Helpers.ReadTextFile2(filePath);
             Test();
 
         }
@@ -20,14 +22,15 @@ namespace WeatherData
         {
             //SÖKFUNKTION IN PROGRESS!
             List<FileData> copy = new List<FileData>();
-            copy = Helpers.ReadTextFile3(filePath);
+            //copy = Helpers.ReadTextFile(filePath);
+            copy = Helpers.ReadTextFile2(filePath);
 
-            //var koko = copy.Where(x => x.Month == 11 && x.Hour == 10);
+            //copy.Where(x => x.HumidityDouble < 10);
 
-            foreach (var item in copy)
+            foreach (var item in copy.Where(x => x.HumidityDouble < 15 && x.TemperatureDouble < 200))
             {
                 //Console.WriteLine(item);
-                //Console.WriteLine("Month: " + item.Month + " - " + "Temperature: " + item.Temperature);
+                Console.WriteLine(item.DateTime + " - " + "Humidity: " + item.HumidityDouble + " Temperature: " + item.TemperatureDouble);
                 //Console.WriteLine("Year :" + item.Year + "\nMonth: " + item.Month + "\nDay: " + item.Day + "\nHour: " + item.Hour + "\nMinutes: " + item.Minutes + "\nSeconds: " + item.Seconds + "\nLocation: " + item.Location + "\nTemperature: " + item.Temperature + "\nHumidity: " + item.Humidity + "\n--------");
             }
 
