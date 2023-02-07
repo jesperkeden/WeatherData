@@ -55,7 +55,43 @@ namespace WeatherData
                 Console.WriteLine("Couldnt find any data from inside on that day.");
             }
         }
-        public virtual void MaxMinWeatherDay()
+        public static void MaxMinWeatherDay(string location)
+        {
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
+            double maxTempDay = 0;
+            double minTempDay = 0;
+            double maxHumDay = 0;
+            double minHumDay = 0;
+            var filteredData = dataList.Where(x => x.Location == location).ToList();
+            var locationList = filteredData.GroupBy(x => x.DateTime.Date).ToList();
+            List<double> resultsTemp = new();
+            List<double> resultsHum = new();
+            foreach (var d in locationList)
+            {
+                double dataAvgTemp = d.Average(x => x.Temperature);
+                if (location == "Ute")
+                {
+                    double dataAvgResult = d.Average(x => x.Humidity);
+                    resultsHum.Add(dataAvgResult);
+
+                    maxHumDay = resultsHum.Max();
+                    minHumDay = resultsHum.Min();
+                }
+
+                resultsTemp.Add(dataAvgTemp);
+                maxTempDay = resultsTemp.Max();
+                minTempDay = resultsTemp.Min();
+            }
+            if(location == "Ute")
+            {
+                Console.WriteLine("The moistest day of the period is: " + Math.Round(maxHumDay, 2));
+                Console.WriteLine("The driest day of the period is: " + Math.Round(minHumDay, 2));
+            }
+            Console.WriteLine("Hottest day of the period is: " + Math.Round(maxTempDay, 2));
+            Console.WriteLine("Coldest day of the period is: " + Math.Round(minTempDay, 2));
+        }
+        public virtual void MinMax(string location)
         {
             List<FileData> dataList = new List<FileData>();
             dataList = Helpers.ReadTextFile(filePath);
