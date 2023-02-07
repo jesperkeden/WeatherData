@@ -15,8 +15,17 @@ namespace WeatherData
             //Menu.Start();
 
             //TESTER
-            AvgValues();
+            // AvgValues();
             //OutsideAvg();
+
+            List<iMeasurable> data = Data1.CreateData();
+
+            foreach(iMeasurable d in data)
+            {
+                Console.WriteLine(d.Location);
+                d.AvgValues();
+            }
+            
 
         }
         public static void Test()
@@ -31,48 +40,37 @@ namespace WeatherData
             }
 
         }
-        //static public void AvgHumidityOutside(List<FileData> filteredData)
+
+        //static public void AvgValues()
         //{
-        //    double humSum = filteredData.Sum(x => x.Humidity);
-        //    double humResult = humSum / filteredData.Count;
-        //    Console.WriteLine(" Average humidity: " + Math.Round(humResult, 2));
+        //    List<FileData> dataList = new List<FileData>();
+        //    dataList = Helpers.ReadTextFile(filePath);
+        //    int menuChoise = 0;
+        //    DateTime inputDate = PromptUserForDate();
+        //    Console.WriteLine("1. Inne\n2. Ute");
+        //    menuChoise = Helpers.TryNumber(menuChoise, 1, 2);
+        //    string locationInput = menuChoise == 1 ? "Inne" : "Ute";
+
+
+        //    List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == locationInput).ToList();
+
+        //    double dataAvgTemp = filteredData.Average(x => x.Temperature);
+        //    double dataAvgResult = filteredData.Average(x => x.Humidity);
+
+        //    if (locationInput == "Inne")
+        //    {
+        //        Console.WriteLine("Average temperature: " + Math.Round(dataAvgTemp, 2));
+        //    }
+        //    else if (locationInput == "Ute")
+        //    {
+        //        Console.WriteLine("Average temperature: " + Math.Round(dataAvgTemp, 2));
+        //        Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2));
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("Couldnt find any data from inside on that day.");
+        //    }
         //}
-        private static Func<FileData, double> GetTemparature(string type)
-        {
-            return x => x.Temperature;
-        }
-
-
-        static public void AvgValues()
-        {
-            List<FileData> dataList = new List<FileData>();
-            dataList = Helpers.ReadTextFile(filePath);
-            int menuChoise = 0;
-            DateTime inputDate = PromptUserForDate();
-            Console.WriteLine("1. Inne\n2. Ute");
-            menuChoise = Helpers.TryNumber(menuChoise, 1, 2);
-            string locationInput = menuChoise == 1 ? "Inne" : "Ute";
-
-
-            List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == locationInput).ToList();
-
-            double dataAvgTemp = filteredData.Average(x => x.Temperature);
-            double dataAvgResult = filteredData.Average(x => x.Humidity);
-
-            if (locationInput == "Inne")
-            {
-                Console.WriteLine("Average temperature: " + Math.Round(dataAvgTemp, 2));
-            }
-            else if (locationInput == "Ute")
-            {
-                Console.WriteLine("Average temperature: " + Math.Round(dataAvgTemp, 2));
-                Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2));
-            }
-            else
-            {
-                Console.WriteLine("Couldnt find any data from inside on that day.");
-            }
-        }
 
         static bool IsValidDate(string date, out DateTime inputDate)
         {
