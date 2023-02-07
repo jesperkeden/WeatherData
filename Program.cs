@@ -14,7 +14,8 @@ namespace WeatherData
             //Menu.Start();
 
             //TESTER
-            ShowInside();
+            //InsideAvgTemp();
+            OutsideAvg();
 
         }
         public static void Test()
@@ -29,8 +30,8 @@ namespace WeatherData
             }
 
         }
-        
-        static public void ShowInside()
+
+        static public void InsideAvgTemp()
         {
             List<FileData> dataList = new List<FileData>();
             dataList = Helpers.ReadTextFile(filePath);
@@ -39,19 +40,39 @@ namespace WeatherData
 
             List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == "Inne").ToList();
 
-            double avgTemp = filteredData.Average(d => d.Temperature);
-            double avgHumidity = filteredData.Average(d => d.Humidity);
-            filteredData = filteredData.OrderBy(d => d.Location).ToList();
-
-            Console.WriteLine("Results for the entered date:");
-            Console.WriteLine("Average temperature: " + avgTemp);
-            Console.WriteLine("Average humidity: " + avgHumidity);
-            Console.WriteLine("Data sorted by location:");
-            foreach (var data in filteredData)
+            if (filteredData == null)
             {
-                Console.WriteLine(data.Location + ": " + data.Temperature + ", " + data.Humidity);
+                Console.WriteLine("Couldnt find any data from inside on that day.");
             }
+            else
+            {
+                double dataSum = filteredData.Sum(x => x.Temperature);
+                double result = dataSum / filteredData.Count;
+                Console.WriteLine(Math.Round(result, 2));
+            }
+        }
+        static public void OutsideAvg()
+        {
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
 
+            DateTime inputDate = PromptUserForDate();
+
+            List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == "Ute").ToList();
+
+            if (filteredData == null)
+            {
+                Console.WriteLine("Couldnt find any data from outside on that day.");
+            }
+            else
+            {
+                double tempSum = filteredData.Sum(x => x.Temperature);
+                double tempResult = tempSum / filteredData.Count;
+
+                double humSum = filteredData.Sum(x => x.Humidity);
+                double humResult = humSum / filteredData.Count;
+                Console.WriteLine("Average temperature: " + Math.Round(tempResult, 2) + " Average humidity: " + Math.Round(humResult, 2));
+            }
         }
 
         static bool IsValidDate(string date, out DateTime inputDate)
