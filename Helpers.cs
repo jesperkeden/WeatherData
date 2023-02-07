@@ -28,42 +28,6 @@ namespace WeatherData
 
         public static List<FileData> ReadTextFile(string filePath)
         {
-            List<FileData> files = new List<FileData>();
-
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                while (!reader.EndOfStream)
-                {
-                    string line = reader.ReadLine();
-                    string[] parts = line.Split(' ', ',', ':', '-');
-                    int year = int.Parse(parts[0]);
-                    int month = int.Parse(parts[1]);
-                    int day = int.Parse(parts[2]);
-                    int hour = int.Parse(parts[3]);
-                    int minute = int.Parse(parts[4]);
-                    int second = int.Parse(parts[5]);
-                    string location = parts[6];
-                    string temperature = parts[7];
-                    string humidity = parts[8].Replace(".", "");
-                    double humidityInt = Convert.ToDouble(humidity);
-
-                    if (year == 2016 && month == 05 || year == 2017)
-                    {
-
-                    }
-                    else
-                    {
-                        files.Add(new FileData(year, month, day, hour, minute, second, location, temperature, humidity));
-                    }
-
-
-                }
-
-            }
-            return files;
-        }
-        public static List<FileData> ReadTextFile2(string filePath)
-        {
             List<FileData> logs = new List<FileData>();
 
             using (StreamReader reader = new StreamReader(filePath))
@@ -71,71 +35,41 @@ namespace WeatherData
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    Match match = Regex.Match(line, @"(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(\d+[\W\S]?\d+)[\W\S]?(\d+[\W\S]?\d+)?$");
-                    //Sista regex från Jesper
-                    //(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(\d+[\W\S]?\d+)[\W\S]?(\d+[\W\S]?\d+)?$
+                    Match match = Regex.Match(line, @"(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(\d+[\W\S]?\d*?),(\d+[\W\S]?\d+)?$");
+
                     if (match.Success)
                     {
-
-                        DateTime date = DateTime.ParseExact(match.Groups[1].Value + "-" + match.Groups[3].Value + "-" + match.Groups[5].Value + " " + match.Groups[7].Value + ":" + match.Groups[9].Value + ":" + match.Groups[11].Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                        string location = match.Groups[12].Value;
-
-                        double temperatureDouble = (Convert.ToDouble(match.Groups[13].Value));
-                        double humidityDouble = (Convert.ToDouble(match.Groups[16].Value));
-
-                        FileData fileData = new FileData(location, temperatureDouble, humidityDouble, date);
-                        logs.Add(fileData);
-
+                        try
+                        {
+                            DateTime date = DateTime.ParseExact(
+                                match.Groups[1].Value + "-" + match.Groups[3].Value + "-" + match.Groups[5].Value + " " +
+                                match.Groups[7].Value + ":" + match.Groups[9].Value + ":" + match.Groups[11].Value,
+                                "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
+                            string location = match.Groups[12].Value;
+                            double temperature;
+                            if (!double.TryParse(match.Groups[13].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out temperature))
+                            {
+                                Console.WriteLine("Could not parse temperature value.");
+                                continue;
+                            }
+                            double humidity;
+                            if (!double.TryParse(match.Groups[14].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out humidity))
+                            {
+                                Console.WriteLine("Could not parse humidity value.");
+                                continue;
+                            }
+                            FileData fileData = new FileData(location, temperature, humidity, date);
+                            logs.Add(fileData);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Error parsing line: " + ex.Message);
+                        }
                     }
                 }
             }
             return logs;
         }
-        //private static FileData TryParseLine(string line)
-        //{
-        //    Match match = Regex.Match(line, @"^(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2}) (?<hour>\d{2}):(?<minute>\d{2}):(?<second>\d{2}) (?<location>(inne|ute)) (?<temp>-?\d+(?:\.\d+)?) (?<humidity>\d+(?:\.\d+)?)");
-        //    if (!match.Success)
-        //    {
-        //        return null;
-        //    }
-
-        //    int year = int.Parse(match.Groups["year"].Value);
-        //    int month = int.Parse(match.Groups["month"].Value);
-        //    int day = int.Parse(match.Groups["day"].Value);
-        //    int hour = int.Parse(match.Groups["hour"].Value);
-        //    int minute = int.Parse(match.Groups["minute"].Value);
-        //    int second = int.Parse(match.Groups["second"].Value);
-        //    string location = match.Groups["location"].Value;
-        //    double temperature = double.Parse(match.Groups["temp"].Value);
-        //    int humidity = int.Parse(match.Groups["humidity"].Value);
-
-        //    try
-        //    {
-        //        DateTime dateTime = new DateTime(year, month, day, hour, minute, second);
-        //        return new FileData(year, month, day, hour, minute, second, location, temperature, humidity);
-        //    }
-        //    catch (ArgumentOutOfRangeException)
-        //    {
-        //        return null;
-        //    }
-        //}
-        //public static List<FileData> ReadTextFile3(string filePath)
-        //{
-        //    List<FileData> logs = new List<FileData>();
-        //    using (var reader = new StreamReader(filePath))
-        //    {
-        //        while (!reader.EndOfStream)
-        //        {
-        //            string line = reader.ReadLine();
-        //            FileData log = TryParseLine(line);
-        //            if (log != null)
-        //            {
-        //                logs.Add(log);
-        //            }
-        //        }
-        //    }
-        //    return logs;
-        //}
 
         //SORTERINGSMETODER
         public static void SortByYear()
