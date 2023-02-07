@@ -18,16 +18,16 @@ namespace WeatherData
             // AvgValues();
             //OutsideAvg();
 
-            List<iMeasurable> data = Data1.CreateData();
 
+
+            //// Lista att använda för att skriva ut inne eller ute i menyn
+            //List<iMeasurable> data = Data1.CreateData();
+            //// Använd såhär: (data[0] = Inomhus, data[1] = Utomhus)
             //data[1].AvgValues();
-
-            Data1.MaxMinWeatherDay("Ute");
-
-
 
 
         }
+
         public static void Test()
         {
             //SÖKFUNKTION IN PROGRESS!
