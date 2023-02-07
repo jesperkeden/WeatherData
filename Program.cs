@@ -20,12 +20,12 @@ namespace WeatherData
 
             List<iMeasurable> data = Data1.CreateData();
 
-            foreach(iMeasurable d in data)
-            {
-                Console.WriteLine(d.Location);
-                d.AvgValues();
-            }
-            
+            //data[1].AvgValues();
+
+            Data1.MaxMinWeatherDay("Ute");
+
+
+
 
         }
         public static void Test()

@@ -13,17 +13,14 @@ namespace WeatherData
 {
     public interface iMeasurable
     {
-        //prop
-        //prop
-        public string Location { get; set; }
-        //void Kallaste();
-        //void Varmaste();
+        public string? Location { get; set; }
+
         void AvgValues();
     }
     public class Data1
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
-        public string Location { get; set; }
+        public string? Location { get; set; }
 
         public static List<iMeasurable> CreateData()
         {
@@ -33,25 +30,11 @@ namespace WeatherData
 
             return data;
         }
-        //public virtual void Kallaste()
-        //{
-        //    //Placeholder
-        //}
-        //public virtual void Varmaste()
-        //{
-        //    //Placeholder
-        //}
-
         public virtual void AvgValues()
         {
             List<FileData> dataList = new List<FileData>();
             dataList = Helpers.ReadTextFile(filePath);
-            int menuChoise = 0;
             DateTime inputDate = PromptUserForDate();
-            //Console.WriteLine("1. Inne\n2. Ute");
-            //menuChoise = Helpers.TryNumber(menuChoise, 1, 2);
-            //Location = menuChoise == 1 ? "Inne" : "Ute";
-
 
             List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == Location).ToList();
 
@@ -72,96 +55,34 @@ namespace WeatherData
                 Console.WriteLine("Couldnt find any data from inside on that day.");
             }
         }
+        public virtual void MaxMinWeatherDay()
+        {
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
+            double maxDay = 0;
+            double minDay = 0;
+            var filteredData = dataList.Where(x => x.Location == Location).ToList();
+            var locationList = filteredData.GroupBy(x => x.DateTime.Date).ToList();
+            List<double> results = new();
+            foreach (var d in locationList)
+            {
+                double avgTempPerDay = d.Average(x => x.Temperature);
+                results.Add(avgTempPerDay);
+                maxDay = results.Max();
+                minDay = results.Min();
+            }
+            Console.WriteLine("Hottest day of the period is: " + Math.Round(maxDay, 2));
+            Console.WriteLine("Coldest day of the period is: " + Math.Round(minDay, 2));
+        }
     }
     public class Inomhus : Data1, iMeasurable
     {
-
-        public void AvgValues()
-        {
-
-        }
     }
-
-
     public class Utomhus : Data1, iMeasurable
     {
-        //public virtual void Kallaste()
-        //{
-        //    //Placeholder
-        //}
-        //public virtual void Varmaste()
-        //{
-        //    //Placeholder
-        //}
-        public void AvgValues()
+        public static void MeteorloghalWinther()
         {
 
         }
-
     }
-
-
-    //////FRÅN INTERFACE DEMO
-    //////public interface IEatable
-    //////{
-    //////    bool Prepared { get; set; }
-    //////    int Price { get; set; }
-
-    //////    void Prepare();
-    //////    void Bake();
-    //////}
-
-    //////public class Pizza
-    //////{
-    //////    public int Price { get; set; }
-    //////    public bool Prepared { get; set; }
-
-    //////    public static List<IEatable> CreatePizzaOrder()
-    //////    {
-    //////        List<IEatable> order = new List<IEatable>();
-    //////        order.Add(new Margerita() { Price = 119 });
-    //////        order.Add(new Calzone() { Price = 129 });
-    //////        order.Add(new KebabPizza() { Price = 139 });
-    //////        return order;
-    //////    }
-    //////    public virtual void Bake()
-    //////    {
-    //////        Console.Write("Grädda i ugn 10 minuter.. ");
-    //////    }
-    //////    public void SetAsPrepared()
-    //////    {
-    //////        Prepared = true;
-    //////    }
-    //////}
-
-    //////public class Margerita : Pizza, IEatable
-    //////{
-    //////    public void Prepare()
-    //////    {
-    //////        Console.Write("Lägger på ost och tomat... ");
-    //////        Console.Write("Massa annat");
-    //////        SetAsPrepared();
-    //////    }
-    //////}
-
-    ////// MAIN FRÅN INTERFACE DEMO
-    //////internal class Program
-    //////{
-    //////    static void Main(string[] args)
-    //////    {
-    //////        List<IEatable> orders = Pizza.CreatePizzaOrder();
-
-    //////        foreach (IEatable pizza in orders)
-    //////        {
-    //////            pizza.Prepare();
-
-    //////            if (pizza.Prepared)
-    //////            {
-    //////                pizza.Bake();
-    //////                Console.WriteLine("Din " + pizza.GetType().Name + " är färdig, priset är: " + pizza.Price);
-    //////            }
-    //////        }
-    //////    }
-    //////}
-
 }
