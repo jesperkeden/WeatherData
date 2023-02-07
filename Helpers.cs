@@ -156,5 +156,22 @@ namespace WeatherData
                 Console.WriteLine("No data found for the entered date.");
             }
         }
+        internal static int TryNumber(int number, int minValue, int maxValue)
+        {
+            bool correctInput = false;
+
+            while (!correctInput)
+            {
+                if (!int.TryParse(Console.ReadLine(), out number) || number > maxValue || number < minValue)
+                {
+                    Console.Write("Fel inmatning. Försök igen: ");
+                }
+                else
+                {
+                    correctInput = true;
+                }
+            }
+            return number;
+        }
     }
 }
