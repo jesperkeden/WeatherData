@@ -220,7 +220,6 @@ namespace WeatherData.Models
         {
             string filePath = "../../../Data/tempdata5-med fel.txt";
             Dictionary<DateTime, double> list = CreateDicForAutumn();
-            bool meteorologicalFall = false; /*IsMeteorolocialFall(list);*/
 
             DateTime startDate = new DateTime(2016, 08, 01);
             int tempCount = 0;
@@ -229,78 +228,26 @@ namespace WeatherData.Models
             {
                 if (day.Key > startDate)
                 {
-                    if (!meteorologicalFall)
+                    if (tempCount < 5)
                     {
-                        meteorologicalFall = true;
-                        startDate = day.Key;
-                        tempCount++;
-                    }
-                }
-                else
-                {
-                    if (meteorologicalFall)
-                    {
-                        if (day.Key.Subtract(startDate).TotalDays >= 5)
+                        if (day.Value < 10)
                         {
-                            Console.WriteLine("startdate: " + startDate.ToString("dd MMM"));
+                            tempCount++;
                         }
-                        meteorologicalFall = false;
+                        else
+                        {
+                            startDate = day.Key;
+                            tempCount = 0;
+                        }
                     }
+
                 }
             }
-            
-
-
-
+            Console.WriteLine("Meterological fall occurs on the " + startDate.ToString("dd MMM"));
         }
 
-        public static bool IsMeteorolocialFall(Dictionary<DateTime, double> autumnList)
-        {
-            int count = 0;
-            for (int i = 0; i < autumnList.Count - 1; i++)
-            {
-                var current = autumnList.ElementAt(i);
-                var next = autumnList.ElementAt(i + 1);
 
-                if (current.Value < 10 && next.Value < 10)
-                {
-                    count++;
-                }
-                else
-                {
-                    count = 0;
-                }
 
-                if (count == 4)
-                {
-                    return true;
-                }
-            }
-            return false;
-
-            //int count = 0;
-            //int nextCount = 0;
-            ////var current = 0;
-            //foreach (KeyValuePair<DateTime,double> day in autumnList)
-            //{
-            //    var current = day.Key;
-            //    var next = day.Key + (nextCount + 1);
-            //    nextCount++;
-
-            //    if (current.Value < 10 && next.Value < 10)
-            //    {
-            //        count++;
-            //    }
-            //    else
-            //    {
-            //        count = 0;
-            //    }
-
-            //    if (count == 4)
-            //    {
-            //        return true;
-            //    }
-            //}
-        }
+    
     }
 }
