@@ -7,12 +7,50 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WeatherData.Data;
 
-namespace WeatherData
+namespace WeatherData.Classes
 {
     internal class Helpers
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
 
+        static bool IsValidDate(string date, out DateTime inputDate)
+        {
+            string pattern = @"^(\d{4})([-./])(\d{2})\2(\d{2})$";
+            DateTime earliest = new DateTime(2016, 6, 01);
+            DateTime latest = new DateTime(2016, 12, 31);
+            inputDate = default;
+
+            if (!Regex.IsMatch(date, pattern))
+            {
+                Console.WriteLine("Invalid date format.");
+                return false;
+            }
+
+            inputDate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            if (inputDate >= earliest && inputDate <= latest)
+            {
+                return true;
+            }
+
+            Console.WriteLine("No data available for the input date");
+            return false;
+        }
+        public static DateTime PromptUserForDate()
+        {
+            Console.WriteLine("Enter a date in yyyy-mm-dd format:");
+            string input = Console.ReadLine();
+            while (true)
+            {
+                if (IsValidDate(input, out var inputDate))
+                {
+                    Console.Clear();
+                    Console.WriteLine("Valid date entered: " + inputDate.ToString("yyyy-MM-dd"));
+                    return inputDate;
+                }
+                Console.WriteLine("Invalid date format. Enter a date in yyyy-mm-dd format:");
+                input = Console.ReadLine();
+            }
+        }
         public static List<string> CreateListOfData()
         {
             List<string> lines = new List<string>();
@@ -71,34 +109,12 @@ namespace WeatherData
             return logs;
         }
 
-        //SORTERINGSMETODER
-        public static void SortByYear()
-        {
-            List<string> list = Helpers.CreateListOfData();
 
-            var groupedData = from line in list
-                              let parts = line.Split(',')
-                              let dateTime = parts[0]
-                              let dateTimeParts = dateTime.Split(' ')
-                              let date = dateTimeParts[0]
-                              let year = date.Split('-')[0]
-                              where year == "2016"
-                              group line by year into yearGroup
-                              select new { Year = yearGroup.Key, Data = yearGroup.ToList() };
 
-            foreach (var yearData in groupedData)
-            {
-                Console.WriteLine("Year: " + yearData.Year);
-                Console.WriteLine("Data:");
-                foreach (string line in yearData.Data)
-                {
-                    Console.WriteLine("    " + line);
-                }
-            }
-        }
+        //SORTING METHODS     No references so far..
         public static void SortByMonth()
         {
-            List<string> list = Helpers.CreateListOfData();
+            List<string> list = CreateListOfData();
             string targetMonth = "05";
 
             var filteredData = from line in list
@@ -115,47 +131,9 @@ namespace WeatherData
                 Console.WriteLine(line);
             }
         }
-        public static void SearchForDate()
-        {
+   
 
-            List<string> lines = Helpers.CreateListOfData();
-            Console.WriteLine("Enter a date to search for (YYYY-MM-DD):");
-            string targetDate = Console.ReadLine();
-
-            var filteredData = from line in lines
-                               let parts = line.Split(',')
-                               let dateTime = parts[0]
-                               let dateTimeParts = dateTime.Split(' ')
-                               let date = dateTimeParts[0]
-                               where date == targetDate
-                               select line;
-
-            if (filteredData.Any())
-            {
-                var sortedData = filteredData.OrderBy(line =>
-                {
-                    string[] parts = line.Split(',');
-                    try
-                    {
-                        return double.Parse(parts[2]);
-                    }
-                    catch (FormatException)
-                    {
-                        Console.WriteLine("Invalid temperature value found in the data: " + parts[2]);
-                        return double.MinValue;
-                    }
-                });
-
-                foreach (string line in sortedData)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No data found for the entered date.");
-            }
-        }
+        // Secure number input
         internal static int TryNumber(int number, int minValue, int maxValue)
         {
             bool correctInput = false;
