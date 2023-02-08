@@ -22,6 +22,7 @@ namespace WeatherData
                 Menu.Start(classList);
 
             }
+            Console.WriteLine("TEST");
         }
     }
 }
