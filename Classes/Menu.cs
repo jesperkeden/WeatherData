@@ -66,6 +66,9 @@ namespace WeatherData.Classes
                     break;
                 case 3:
                     Console.WriteLine("Sortering av minst till störst risk av mögel");
+                    Console.Clear();
+                    insideClass.CalculateTotalRiskPerDay();
+                    Console.ReadKey();
                     break;
                 case 4:
                     // Back to RunMainMenu
@@ -100,6 +103,9 @@ namespace WeatherData.Classes
                     break;
                 case 3:
                     Console.WriteLine("Sortering av minst till störst risk av mögel");
+                    Console.Clear();
+                    outsideClass.CalculateTotalRiskPerDay();
+                    Console.ReadKey();
                     break;
                 case 4:
                     Console.WriteLine("Datum för meteorologisk höst");

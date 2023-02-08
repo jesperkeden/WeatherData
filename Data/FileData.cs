@@ -13,6 +13,7 @@ namespace WeatherData.Data
         public string Location { get; set; }
         public double Humidity { get; set; }
         public double Temperature { get; set; }
+        //public double Risk { get; set; }
 
         public FileData(string location, double temperature, double humidity, DateTime date)
         {

@@ -11,6 +11,7 @@ using static WeatherData.Program;
 using System.Collections.Immutable;
 using WeatherData.Classes;
 using static WeatherData.Classes.Helpers;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WeatherData.Models
 {
@@ -20,6 +21,7 @@ namespace WeatherData.Models
 
         void AvgValues();
         void MaxMinWeatherDay(string chooseOrderBy);
+        void CalculateTotalRiskPerDay();
     }
     public class Data1
     {
@@ -103,6 +105,109 @@ namespace WeatherData.Models
                 }
             }
         }
+        // Sort by risk of mold 
+        public virtual void CalculateTotalRiskPerDay()
+        {
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
+            var filteredData = dataList.Where(x => x.Location == Location).ToList();
+            var dayData = filteredData.GroupBy(x => x.DateTime.Date);
+            Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
+
+            foreach (var day in dayData.OrderBy(x => x.Key))
+            {
+                double risk = 0;
+                string stringToParse = day.Key.ToString("dd MMM");
+                var parsedDate = DateTime.Parse(stringToParse);
+                risk += CalculateMoldRisk(Math.Round(day.Average(y => y.Temperature), 1), Math.Round(day.Average(y => y.Humidity), 1));
+                riskList.Add(parsedDate, risk);
+            }
+            var sortedRiskList = riskList.OrderByDescending(x => x.Value);
+            foreach (var day in sortedRiskList)
+            {
+                Console.WriteLine(day.Key.ToString("dd MMM") + " - Total risk of mold: " + day.Value + "%");
+            }
+        }
+        // Calculate the risk of mold
+        private static double CalculateMoldRisk(double temp, double hum)
+        {
+            double risk = 0;
+
+            if ((temp > 0 && temp < 10) && (hum > 95 && hum <= 100))
+            {
+                risk = 100;
+            }
+            else if (temp < 0 || hum < 75)
+            {
+                risk = 0;
+                return risk;
+            }
+            else
+            {
+                //TEMP
+                if (temp < 10)
+                {
+                    risk += 20;
+                }
+
+                if (temp < 20)
+                {
+                    risk += 15;
+                }
+
+                if (temp < 30)
+                {
+                    risk += 10;
+                }
+
+                if (temp < 40)
+                {
+                    risk += 5;
+                }
+
+                //HUM
+                if (hum > 80)
+                {
+                    risk += 10;
+                }
+
+                else if (hum > 90)
+                {
+                    risk += 15;
+                }
+
+                else if (hum > 95)
+                {
+                    risk += 20;
+                }
+            }
+
+            return risk;
+        }
+
+        public static Dictionary<DateTime, double> CreateDicForAutumn()
+        {
+            string filePath = "../../../Data/tempdata5-med fel.txt";
+
+
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
+            var filteredData = dataList.Where(x => x.Location == "Ute").ToList();
+            var dayData = filteredData.GroupBy(x => x.DateTime.Date);
+            Dictionary<DateTime, double> autumnList = new Dictionary<DateTime, double>();
+
+            foreach (var day in dayData.OrderBy(x => x.Key))
+            {
+                string stringToParse = day.Key.ToString("dd MMM");
+                var parsedDate = DateTime.Parse(stringToParse);
+                var avgTemp = (Math.Round(day.Average(y => y.Temperature), 1));
+                autumnList.Add(parsedDate, avgTemp);
+            }
+
+            return autumnList;
+
+        }
+
     }
     public class Inomhus : Data1, iMeasurable { }
     public class Utomhus : Data1, iMeasurable
@@ -113,7 +218,89 @@ namespace WeatherData.Models
         }
         public static void MeteorologicalFall() // Same method as winther? or maybe delegate??
         {
+            string filePath = "../../../Data/tempdata5-med fel.txt";
+            Dictionary<DateTime, double> list = CreateDicForAutumn();
+            bool meteorologicalFall = false; /*IsMeteorolocialFall(list);*/
 
+            DateTime startDate = new DateTime(2016, 08, 01);
+            int tempCount = 0;
+
+            foreach (var day in list)
+            {
+                if (day.Key > startDate)
+                {
+                    if (!meteorologicalFall)
+                    {
+                        meteorologicalFall = true;
+                        startDate = day.Key;
+                        tempCount++;
+                    }
+                }
+                else
+                {
+                    if (meteorologicalFall)
+                    {
+                        if (day.Key.Subtract(startDate).TotalDays >= 5)
+                        {
+                            Console.WriteLine("startdate: " + startDate.ToString("dd MMM"));
+                        }
+                        meteorologicalFall = false;
+                    }
+                }
+            }
+            
+
+
+
+        }
+
+        public static bool IsMeteorolocialFall(Dictionary<DateTime, double> autumnList)
+        {
+            int count = 0;
+            for (int i = 0; i < autumnList.Count - 1; i++)
+            {
+                var current = autumnList.ElementAt(i);
+                var next = autumnList.ElementAt(i + 1);
+
+                if (current.Value < 10 && next.Value < 10)
+                {
+                    count++;
+                }
+                else
+                {
+                    count = 0;
+                }
+
+                if (count == 4)
+                {
+                    return true;
+                }
+            }
+            return false;
+
+            //int count = 0;
+            //int nextCount = 0;
+            ////var current = 0;
+            //foreach (KeyValuePair<DateTime,double> day in autumnList)
+            //{
+            //    var current = day.Key;
+            //    var next = day.Key + (nextCount + 1);
+            //    nextCount++;
+
+            //    if (current.Value < 10 && next.Value < 10)
+            //    {
+            //        count++;
+            //    }
+            //    else
+            //    {
+            //        count = 0;
+            //    }
+
+            //    if (count == 4)
+            //    {
+            //        return true;
+            //    }
+            //}
         }
     }
 }
