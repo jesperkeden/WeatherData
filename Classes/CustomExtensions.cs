@@ -10,16 +10,16 @@ using System.Threading.Tasks;
 
 namespace WeatherData.Classes
 {
-    internal static class CustomExtensions
+    public static class CustomExtensions
     {
-
-        //public static void ParseDouble(this string blabla, CultureInfo culture, Match match)
-        //{
-        //    double doubleValue;
-        //    if (!double.TryParse(match.Groups[13].Value, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out temperature))
-        //    {
-        //        throw new FormatException("This could not be parsed!");
-        //    }
-        //}
+        public static void ViewBox(this string input)
+        {
+            Console.SetCursorPosition(2, 0);
+            Console.WriteLine('┌' + new String('─', input.Length + 2) + '┐');
+            Console.SetCursorPosition(2, 1);
+            Console.WriteLine("│ " + input + " │");
+            Console.SetCursorPosition(2, 2);
+            Console.WriteLine('└' + new String('─', input.Length + 2) + '┘');
+        }
     }
 }

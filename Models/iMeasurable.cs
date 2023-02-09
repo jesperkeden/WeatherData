@@ -18,6 +18,7 @@ namespace WeatherData.Models
     public interface iMeasurable
     {
         public string? Location { get; set; }
+        public string Name { get; set; }
 
         void AvgValues();
         void MaxMinWeatherDay(string chooseOrderBy);
@@ -28,12 +29,13 @@ namespace WeatherData.Models
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
         public string? Location { get; set; }
+        public string Name { get; set; }
 
         public static List<iMeasurable> CreateData()
         {
             List<iMeasurable> data = new List<iMeasurable>();
-            data.Add(new Inomhus() { Location = "Inne" });
-            data.Add(new Utomhus() { Location = "Ute" });
+            data.Add(new Inomhus() { Location = "Inne", Name = "Inside"});
+            data.Add(new Utomhus() { Location = "Ute" , Name = "Outside" });
 
             return data;
         }
@@ -130,7 +132,7 @@ namespace WeatherData.Models
             }
         }
         // Calculate the risk of mold
-        private static double CalculateMoldRisk(double temp, double hum)
+        public static double CalculateMoldRisk(double temp, double hum)
         {
             double risk = 0;
 
