@@ -106,5 +106,108 @@ namespace WeatherData.Models
 
             return risk;
         }
+
+
+        //FRÅN NÄR DET FUNGERADE!
+        //public virtual void CalculateTotalRiskPerDay()
+        //{
+        //    List<FileData> dataList = new List<FileData>();
+        //    dataList = Helpers.ReadTextFile(filePath);
+        //    var filteredData = dataList.Where(x => x.Location == Location).ToList();
+        //    var dayData = filteredData.GroupBy(x => x.DateTime.Date);
+        //    Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
+
+        //    foreach (var day in dayData.OrderBy(x => x.Key))
+        //    {
+        //        double risk = 0;
+        //        string stringToParse = day.Key.ToString("dd MMM");
+        //        var parsedDate = DateTime.Parse(stringToParse);
+        //        risk += CalculateMoldRisk(Math.Round(day.Average(y => y.Temperature), 1), Math.Round(day.Average(y => y.Humidity), 1));
+        //        riskList.Add(parsedDate, risk);
+        //    }
+        //    var sortedRiskList = riskList.OrderByDescending(x => x.Value);
+        //    foreach (var day in sortedRiskList)
+        //    {
+        //        Console.WriteLine(day.Key.ToString("dd MMM") + " - Total risk of mold: " + day.Value + "%");
+        //    }
+        //}
+        // Calculate the risk of mold
+        //private static double CalculateMoldRisk(double temp, double hum)
+        //{
+        //    double risk = 0;
+
+        //    if ((temp > 0 && temp < 10) && (hum > 95 && hum <= 100))
+        //    {
+        //        risk = 100;
+        //    }
+        //    else if (temp < 0 || hum < 75)
+        //    {
+        //        risk = 0;
+        //        return risk;
+        //    }
+        //    else
+        //    {
+        //        //TEMP
+        //        if (temp < 10)
+        //        {
+        //            risk += 20;
+        //        }
+
+        //        if (temp < 20)
+        //        {
+        //            risk += 15;
+        //        }
+
+        //        if (temp < 30)
+        //        {
+        //            risk += 10;
+        //        }
+
+        //        if (temp < 40)
+        //        {
+        //            risk += 5;
+        //        }
+
+        //        //HUM
+        //        if (hum > 80)
+        //        {
+        //            risk += 10;
+        //        }
+
+        //        else if (hum > 90)
+        //        {
+        //            risk += 15;
+        //        }
+
+        //        else if (hum > 95)
+        //        {
+        //            risk += 20;
+        //        }
+        //    }
+
+        //    return risk;
+        //}
+
+        //public static Dictionary<DateTime, double> CreateDicForAutumn()
+        //{
+        //    string filePath = "../../../Data/tempdata5-med fel.txt";
+
+
+        //    List<FileData> dataList = new List<FileData>();
+        //    dataList = Helpers.ReadTextFile(filePath);
+        //    var filteredData = dataList.Where(x => x.Location == "Ute").ToList();
+        //    var dayData = filteredData.GroupBy(x => x.DateTime.Date);
+        //    Dictionary<DateTime, double> autumnList = new Dictionary<DateTime, double>();
+
+        //    foreach (var day in dayData.OrderBy(x => x.Key))
+        //    {
+        //        string stringToParse = day.Key.ToString("dd MMM");
+        //        var parsedDate = DateTime.Parse(stringToParse);
+        //        var avgTemp = (Math.Round(day.Average(y => y.Temperature), 1));
+        //        autumnList.Add(parsedDate, avgTemp);
+        //    }
+        //    return autumnList;
+        //}
+
     }
 }
