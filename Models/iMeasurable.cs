@@ -12,6 +12,7 @@ using System.Collections.Immutable;
 using WeatherData.Classes;
 using static WeatherData.Classes.Helpers;
 using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
 
 namespace WeatherData.Models
 {
@@ -178,50 +179,55 @@ namespace WeatherData.Models
             }
         }
         // Sort by risk of mold 
-        public virtual string CalculateTotalRiskPerDay(string timeSpan)
+        public virtual string CalculateTotalRiskPerTimeSpan(string timeSpan)
         {
             string result = "";
             Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
-            List<FileData> dataList = new List<FileData>();
-            dataList = Helpers.ReadTextFile(filePath);
-            var filteredData = dataList;
-            filteredData = dataList.Where(x => x.Location == Location).ToList();
-            var dayData = filteredData;
-            if (timeSpan != "Month")
-            {
-                dayData = (List<FileData>)filteredData.GroupBy(x => x.DateTime.Date);
-            }
+            List<FileData> dataList = Helpers.ReadTextFile(filePath);
+            var filteredData = dataList.Where(x => x.Location == Location).ToList();
 
-            if (timeSpan == "Month")
+            var groupedData = GroupDataByTimeSpan(filteredData, timeSpan);
+            foreach (var dayData in groupedData)
             {
-                dayData = (List<FileData>)filteredData.GroupBy(x => x.DateTime.Month);
-            }
-
-
-            foreach (var dayD in dayData.OrderBy(x => x.Key))
-            {
-                double risk = 0;
-                string stringToParse = dayD.Key.ToString("dd MMM");
-                var parsedDate = DateTime.Parse(stringToParse);
-                risk += CalculateMoldRisk(Math.Round(dayD.Average(y => y.Temperature), 1), Math.Round(dayD.Average(y => y.Humidity), 1));
+                double risk = CalculateMoldRisk(Math.Round(dayData.Average(y => y.Temperature), 1), Math.Round(dayData.Average(y => y.Humidity), 1));
+                var parsedDate = GetParsedDate(dayData.Key, timeSpan);
                 riskList.Add(parsedDate, risk);
             }
+
             var sortedRiskList = riskList.OrderByDescending(x => x.Value);
             foreach (var dayD in sortedRiskList)
             {
-                if (timeSpan == "Month")
-                {
-                    result = (dayD.Key.ToString("MMMM") + " - Total risk of mold: " + dayD.Value + "%");
-                    Console.WriteLine(result);
-                }
-                else
-                {
-                    result = (dayD.Key.ToString("dd MMM") + " - Total risk of mold: " + dayD.Value + "%");
-                    Console.WriteLine(result);
-                }
+                result = (dayD.Key.ToString("MMMM") + " - Total risk of mold: " + dayD.Value + "%");
+                Console.WriteLine(result);
             }
+
             return result;
         }
+
+        private IEnumerable<IGrouping<DateTime, FileData>> GroupDataByTimeSpan(List<FileData> data, string timeSpan)
+        {
+            if (timeSpan == "Month")
+            {
+                return data.GroupBy(x => new DateTime(x.DateTime.Year, x.DateTime.Month, 1));
+            }
+            else
+            {
+                return data.GroupBy(x => x.DateTime.Date);
+            }
+        }
+
+        private DateTime GetParsedDate(DateTime key, string timeSpan)
+        {
+            if (timeSpan == "Month")
+            {
+                return new DateTime(key.Year, key.Month, 1);
+            }
+            else
+            {
+                return key.Date;
+            }
+        }
+
         // Calculate the risk of mold
         public static double CalculateMoldRisk(double temp, double hum)
         {
@@ -342,5 +348,6 @@ namespace WeatherData.Models
             }
             Console.WriteLine("Meterological " + (temp == 10 ? "fall" : "winter") + " occurs on the " + startDate.ToString("dd MMM"));
         }
+
     }
 }
