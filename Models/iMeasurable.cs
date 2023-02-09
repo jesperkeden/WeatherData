@@ -22,7 +22,7 @@ namespace WeatherData.Models
 
         void AvgValues();
         void MaxMinWeatherDay(string chooseOrderBy);
-        void CalculateTotalRiskPerDay();
+        string CalculateTotalRiskPerDay(string timeSpan);
         void MeteorologicalDate(int temp);
     }
     public class Data1
@@ -34,8 +34,8 @@ namespace WeatherData.Models
         public static List<iMeasurable> CreateData()
         {
             List<iMeasurable> data = new List<iMeasurable>();
-            data.Add(new Inomhus() { Location = "Inne", Name = "Inside"});
-            data.Add(new Utomhus() { Location = "Ute" , Name = "Outside" });
+            data.Add(new Inomhus() { Location = "Inne", Name = "Inside" });
+            data.Add(new Utomhus() { Location = "Ute", Name = "Outside" });
 
             return data;
         }
@@ -45,6 +45,7 @@ namespace WeatherData.Models
             List<FileData> dataList = new List<FileData>();
             dataList = ReadTextFile(filePath);
             DateTime inputDate = PromptUserForDate();
+
 
             List<FileData> filteredData = dataList.Where(d => d.DateTime.Date == inputDate.Date && d.Location == Location).ToList();
             if (filteredData.Count > 0)
@@ -76,6 +77,74 @@ namespace WeatherData.Models
                 Console.WriteLine(new String('-', 30));
                 Console.WriteLine("Couldn't find any data from inside on that day.");
             }
+
+
+        }
+        public static void Test()
+        {
+            Data1 data = new();
+            List<FileData> dataList = new List<FileData>();
+            dataList = Helpers.ReadTextFile(filePath);
+            //string ute = "Ute";
+            //string inne = "Inne";
+
+            string tempInsideToLogFile = "";
+            string tempOutsideToLogFile = "";
+
+            string humInsideToLogFile = "";
+            string humOutsideToLogFile = "";
+
+            string moldInsideToLogFile = "";
+            string moldOutsideToLogFile = "";
+
+            List<FileData> filterUte = dataList.Where(d => d.Location == "Ute").ToList();
+            var uteData = filterUte.GroupBy(d => d.DateTime.Month);
+
+            foreach (var month in uteData)
+            {
+                tempOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
+                humOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
+                moldOutsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+            }
+
+            List<FileData> filterInne = dataList.Where(d => d.Location == "Inne").ToList();
+            var inneData = filterInne.GroupBy(d => d.DateTime.Month);
+
+            foreach (var month in inneData)
+            {
+
+                tempInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
+                humInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
+                moldInsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+            }
+
+
+
+
+
+            //foreach (var month in monthData)
+            //{
+            //    location = "Inne";
+            //    tempInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
+            //    humInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
+            //    moldInsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+
+            //    location = "Ute";
+            //    tempOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
+            //    humOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
+            //    moldOutsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+            //}
+
+            Console.WriteLine("Inne");
+            Console.WriteLine(tempInsideToLogFile);
+            Console.WriteLine(humInsideToLogFile);
+            Console.WriteLine(moldInsideToLogFile);
+            Console.WriteLine();
+            Console.WriteLine("Ute");
+            Console.WriteLine(tempOutsideToLogFile);
+            Console.WriteLine(humOutsideToLogFile);
+            Console.WriteLine(moldOutsideToLogFile);
+
         }
 
         // Warm/Cold || Wet/Dry
@@ -109,27 +178,49 @@ namespace WeatherData.Models
             }
         }
         // Sort by risk of mold 
-        public virtual void CalculateTotalRiskPerDay()
+        public virtual string CalculateTotalRiskPerDay(string timeSpan)
         {
+            string result = "";
+            Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
             List<FileData> dataList = new List<FileData>();
             dataList = Helpers.ReadTextFile(filePath);
-            var filteredData = dataList.Where(x => x.Location == Location).ToList();
-            var dayData = filteredData.GroupBy(x => x.DateTime.Date);
-            Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
+            var filteredData = dataList;
+            filteredData = dataList.Where(x => x.Location == Location).ToList();
+            var dayData = filteredData;
+            if (timeSpan != "Month")
+            {
+                dayData = (List<FileData>)filteredData.GroupBy(x => x.DateTime.Date);
+            }
 
-            foreach (var day in dayData.OrderBy(x => x.Key))
+            if (timeSpan == "Month")
+            {
+                dayData = (List<FileData>)filteredData.GroupBy(x => x.DateTime.Month);
+            }
+
+
+            foreach (var dayD in dayData.OrderBy(x => x.Key))
             {
                 double risk = 0;
-                string stringToParse = day.Key.ToString("dd MMM");
+                string stringToParse = dayD.Key.ToString("dd MMM");
                 var parsedDate = DateTime.Parse(stringToParse);
-                risk += CalculateMoldRisk(Math.Round(day.Average(y => y.Temperature), 1), Math.Round(day.Average(y => y.Humidity), 1));
+                risk += CalculateMoldRisk(Math.Round(dayD.Average(y => y.Temperature), 1), Math.Round(dayD.Average(y => y.Humidity), 1));
                 riskList.Add(parsedDate, risk);
             }
             var sortedRiskList = riskList.OrderByDescending(x => x.Value);
-            foreach (var day in sortedRiskList)
+            foreach (var dayD in sortedRiskList)
             {
-                Console.WriteLine(day.Key.ToString("dd MMM") + " - Total risk of mold: " + day.Value + "%");
+                if (timeSpan == "Month")
+                {
+                    result = (dayD.Key.ToString("MMMM") + " - Total risk of mold: " + dayD.Value + "%");
+                    Console.WriteLine(result);
+                }
+                else
+                {
+                    result = (dayD.Key.ToString("dd MMM") + " - Total risk of mold: " + dayD.Value + "%");
+                    Console.WriteLine(result);
+                }
             }
+            return result;
         }
         // Calculate the risk of mold
         public static double CalculateMoldRisk(double temp, double hum)

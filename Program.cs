@@ -8,74 +8,75 @@ using WeatherData.Models;
 
 namespace WeatherData
 {
-    delegate void LogToFileDelegate(string message);
+    //delegate void LogToFileDelegate(string message);
     internal class Program
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
         static void Main(string[] args)
         {
-            Console.CursorVisible = false;
-            bool runProgram = true;
+            //Console.CursorVisible = false;
+            //bool runProgram = true;
 
-            while (runProgram)
-            {
-                List<iMeasurable> classList = Data1.CreateData();
+            //while (runProgram)
+            //{
+            //    List<iMeasurable> classList = Data1.CreateData();
 
-                Menu.Start(classList);
+            //    Menu.Start(classList);
 
-            }
-
-
-            StreamWriter file = new StreamWriter("log.txt", true);
-            LogToFileDelegate logToFile = LogToFileDelegate(WriteToFile);
-        }
-        static void WritetoFile(string message)
-        {
-            StreamWriter file = new StreamWriter("log.txt", true);
-            file.WriteLine(message);
-            file.Close();
+            //}
+            Data1.Test();
         }
 
-        static void AvgTempPerMonth(LogToFileDelegate logToFile)
-        {
-            double avgInside = 5;
-            double avgOutside = 5;
 
-            //Log to file
-            logToFile("avg inside temp per month: " + avgInside);
-            logToFile("avg inside temp per month: " + avgOutside);
-        }
+        //StreamWriter file = new StreamWriter("log.txt", true);
+        //LogToFileDelegate logToFile = LogToFileDelegate(WriteToFile);
+        //static void WritetoFile(string message)
+        //{
+        //    StreamWriter file = new StreamWriter("log.txt", true);
+        //    file.WriteLine(message);
+        //    file.Close();
+        //}
 
-        static void AvgHumPerMonth(LogToFileDelegate logToFile)
-        {
-            double avgInside = 5;
-            double avgOutside = 5;
+        //static void AvgTempPerMonth(LogToFileDelegate logToFile)
+        //{
+        //    double avgInside = 5;
+        //    double avgOutside = 5;
 
-            //Log to file
-            logToFile("avg inside hum per month: " + avgInside);
-            logToFile("avg inside hum per month: " + avgOutside);
-        }
+        //    //Log to file
+        //    logToFile("avg inside temp per month: " + avgInside);
+        //    logToFile("avg inside temp per month: " + avgOutside);
+        //}
 
-        static void RiskOfMold(LogToFileDelegate logToFile)
-        {
-            double avgInside = 5;
-            double avgOutside = 5;
+        //static void AvgHumPerMonth(LogToFileDelegate logToFile)
+        //{
+        //    double avgInside = 5;
+        //    double avgOutside = 5;
 
-            //Log to file
-            logToFile("risk of mold inside: " + avgInside);
-            logToFile("risk of mold outside: " + avgOutside);
-        }
+        //    //Log to file
+        //    logToFile("avg inside hum per month: " + avgInside);
+        //    logToFile("avg inside hum per month: " + avgOutside);
+        //}
 
-        static void MeteorologicalSeasons(LogToFileDelegate logToFile)
-        {
-            string meteorolocialFallWinter = "";
-            logToFile("Meteorological Fall / Winter occurs: " + meteorolocialFallWinter);
-        }
+        //static void RiskOfMold(LogToFileDelegate logToFile)
+        //{
+        //    double avgInside = 5;
+        //    double avgOutside = 5;
 
-        static void MoldCalc(LogToFileDelegate logTofile)
-        {
-            //calc på algoritm
-            logTofile("Mold calculation Algorithm: " + "något mer");
-        }
+        //    //Log to file
+        //    logToFile("risk of mold inside: " + avgInside);
+        //    logToFile("risk of mold outside: " + avgOutside);
+        //}
+
+        //static void MeteorologicalSeasons(LogToFileDelegate logToFile)
+        //{
+        //    string meteorolocialFallWinter = "";
+        //    logToFile("Meteorological Fall / Winter occurs: " + meteorolocialFallWinter);
+        //}
+
+        //static void MoldCalc(LogToFileDelegate logTofile)
+        //{
+        //    //calc på algoritm
+        //    logTofile("Mold calculation Algorithm: " + "något mer");
+        //}
     }
 }

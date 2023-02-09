@@ -72,7 +72,7 @@ namespace WeatherData.Classes
                     //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
                     insideClass.Name.ViewBox();
-                    insideClass.CalculateTotalRiskPerDay();
+                    insideClass.CalculateTotalRiskPerDay("");
                     Console.ReadKey();
                     break;
                 case 4:
@@ -113,7 +113,7 @@ namespace WeatherData.Classes
                     //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
                     outsideClass.Name.ViewBox();
-                    outsideClass.CalculateTotalRiskPerDay();
+                    outsideClass.CalculateTotalRiskPerDay("");
                     Console.ReadKey();
                     break;
                 case 4:
