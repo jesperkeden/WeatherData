@@ -24,7 +24,23 @@ namespace WeatherData
             //    Menu.Start(classList);
 
             //}
-            Data1.Test();
+            //Data1.Test();
+            //Dictionary<DateTime, double> testdic = new();
+            //testdic = MoldRiskCalculator.CalculateAverageMoldRiskPerMonth();
+            //foreach (KeyValuePair<DateTime, double> kvp in testdic)
+            //{
+            //    Console.WriteLine(kvp.Key.ToString("MMMM yyyy") + " Value: " + kvp.Value);
+            //}
+
+            Dictionary<DateTime, double> testdic2 = new();
+            testdic2 = MoldRiskCalculator.CalculateAverageMoldRiskPerday();
+            foreach (KeyValuePair<DateTime, double> kvp in testdic2)
+            {
+                Console.WriteLine(kvp.Key.ToString("dd MMM") + " Value: " + kvp.Value);
+            }
+
+
+
         }
 
 
