@@ -13,18 +13,18 @@ namespace WeatherData
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
         static void Main(string[] args)
         {
-            //Console.CursorVisible = false;
-            //bool runProgram = true;
+            Console.CursorVisible = false;
+            bool runProgram = true;
 
-            //while (runProgram)
-            //{
-            //    List<iMeasurable> classList = Data1.CreateData();
+            while (runProgram)
+            {
+                List<iMeasurable> classList = Data1.CreateData();
 
-            //    Menu.Start(classList);
+                Menu.Start(classList);
 
-            //}
+            }
             //Data1.CalculateTotalRiskPerDay(filePath, "Ute");
-            Utomhus.MeteorologicalFall();
+            //Utomhus.MeteorologicalFall();
         }
     }
 }

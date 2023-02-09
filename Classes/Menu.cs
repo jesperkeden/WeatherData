@@ -46,26 +46,26 @@ namespace WeatherData.Classes
             switch (selectedIndex)
             {
                 case 0:
-                    Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
+                    //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
                     insideClass.AvgValues();
                     Console.ReadKey();
                     break;
                 case 1:
                     //HotNCold();
-                    Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
+                    //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
                     insideClass.MaxMinWeatherDay("Temperature");
                     Console.ReadKey();
                     break;
                 case 2:
-                    Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
+                    //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
                     insideClass.MaxMinWeatherDay("Humidity");
                     Console.ReadKey();
                     break;
                 case 3:
-                    Console.WriteLine("Sortering av minst till störst risk av mögel");
+                    //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
                     insideClass.CalculateTotalRiskPerDay();
                     Console.ReadKey();
@@ -84,34 +84,40 @@ namespace WeatherData.Classes
             switch (selectedIndex)
             {
                 case 0:
-                    Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
+                    //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
                     outsideClass.AvgValues();
                     Console.ReadKey();
                     break;
                 case 1:
-                    Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
+                    //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
                     outsideClass.MaxMinWeatherDay("Temperature");
                     Console.ReadKey();
                     break;
                 case 2:
-                    Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
+                    //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
                     outsideClass.MaxMinWeatherDay("Humidity");
                     Console.ReadKey();
                     break;
                 case 3:
-                    Console.WriteLine("Sortering av minst till störst risk av mögel");
+                    //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
                     outsideClass.CalculateTotalRiskPerDay();
                     Console.ReadKey();
                     break;
                 case 4:
-                    Console.WriteLine("Datum för meteorologisk höst");
+                    //Console.WriteLine("Datum för meteorologisk höst");
+                    Console.Clear();
+                    outsideClass.MeteorologicalDate(10);
+                    Console.ReadKey();
                     break;
                 case 5:
-                    Console.WriteLine("Datum för meteorologisk vinter(OBS Mild vinter!)");
+                    //Console.WriteLine("Datum för meteorologisk vinter(OBS Mild vinter!)");
+                    Console.Clear();
+                    outsideClass.MeteorologicalDate(0);
+                    Console.ReadKey();
                     break;
                 case 6:
                     // Back to RunMainMenu

@@ -20,8 +20,8 @@ namespace WeatherData.Classes
             Sort_By_Temperature,
             Sort_By_Humidity,
             Sort_By_Risk_For_Mold,
-            Metrological_Winter,
             Metrological_Fall,
+            Metrological_Winter,
             Return
         }
         public enum InsideMenu

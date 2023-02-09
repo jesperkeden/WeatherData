@@ -73,7 +73,7 @@ namespace WeatherData.Classes
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    Match match = Regex.Match(line, @"(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(\d+[\W\S]?\d*?),(\d+[\W\S]?\d+)?$");
+                    Match match = Regex.Match(line, @"(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(-?\d+[\W\S]?\d*?),(-?\d+[\W\S]?\d+)?$");
 
                     if (match.Success)
                     {
@@ -85,7 +85,7 @@ namespace WeatherData.Classes
                                 "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
                             string location = match.Groups[12].Value;
                             double temperature;
-                            if (!double.TryParse(match.Groups[13].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out temperature))
+                            if (!double.TryParse(match.Groups[13].Value, NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out temperature))
                             {
                                 Console.WriteLine("Could not parse temperature value.");
                                 continue;

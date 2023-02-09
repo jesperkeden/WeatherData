@@ -22,6 +22,7 @@ namespace WeatherData.Models
         void AvgValues();
         void MaxMinWeatherDay(string chooseOrderBy);
         void CalculateTotalRiskPerDay();
+        void MeteorologicalDate(int temp);
     }
     public class Data1
     {
@@ -208,15 +209,18 @@ namespace WeatherData.Models
 
         }
 
+
     }
-    public class Inomhus : Data1, iMeasurable { }
-    public class Utomhus : Data1, iMeasurable
+    public class Inomhus : Data1, iMeasurable
     {
-        public static void MeteorologicalWinther()
+        public void MeteorologicalDate(int temp)
         {
 
         }
-        public static void MeteorologicalFall() // Same method as winther? or maybe delegate??
+    }
+    public class Utomhus : Data1, iMeasurable
+    {
+        public void MeteorologicalDate(int temp)
         {
             string filePath = "../../../Data/tempdata5-med fel.txt";
             Dictionary<DateTime, double> list = CreateDicForAutumn();
@@ -230,7 +234,7 @@ namespace WeatherData.Models
                 {
                     if (tempCount < 5)
                     {
-                        if (day.Value < 10)
+                        if (day.Value <= temp)
                         {
                             tempCount++;
                         }
@@ -243,11 +247,7 @@ namespace WeatherData.Models
 
                 }
             }
-            Console.WriteLine("Meterological fall occurs on the " + startDate.ToString("dd MMM"));
+            Console.WriteLine("Meterological " + (temp == 10 ? "fall" : "winter") + " occurs on the " + startDate.ToString("dd MMM"));
         }
-
-
-
-    
     }
 }
