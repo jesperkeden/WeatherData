@@ -23,7 +23,7 @@ namespace WeatherData.Models
 
         void AvgValues();
         void MaxMinWeatherDay(string chooseOrderBy);
-        string CalculateTotalRiskPerDay(string timeSpan);
+        string CalculateTotalRiskPerTimeSpan(string timeSpan);
         void MeteorologicalDate(int temp);
     }
     public class Data1
@@ -103,9 +103,9 @@ namespace WeatherData.Models
 
             foreach (var month in uteData)
             {
-                tempOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
-                humOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
-                moldOutsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+                tempOutsideToLogFile += ($"{month.Key.ToString("MM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
+                humOutsideToLogFile += ($"{month.Key.ToString("MM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
+                //moldOutsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
             }
 
             List<FileData> filterInne = dataList.Where(d => d.Location == "Inne").ToList();
@@ -114,12 +114,27 @@ namespace WeatherData.Models
             foreach (var month in inneData)
             {
 
-                tempInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
-                humInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
-                moldInsideToLogFile = data.CalculateTotalRiskPerDay("Month");
+                tempInsideToLogFile += ($"{month.Key.ToString("MM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
+                humInsideToLogFile += ($"{month.Key.ToString("MM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
+                //moldInsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
             }
 
-
+            ("Outside").ViewBox(0);
+            moldOutsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
+            Console.WriteLine(new String('-', 35));
+            Console.WriteLine("Ute");
+            Console.WriteLine(tempOutsideToLogFile);
+            Console.WriteLine(new String('-', 35));
+            Console.WriteLine(humOutsideToLogFile);
+            //Console.WriteLine(moldOutsideToLogFile);
+            ("Inside").ViewBox(35);
+            moldInsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
+            Console.WriteLine(new String('-', 35));
+            Console.WriteLine("Inne");
+            Console.WriteLine(tempInsideToLogFile);
+            Console.WriteLine(new String('-', 35));
+            Console.WriteLine(humInsideToLogFile);
+            //Console.WriteLine(moldInsideToLogFile);
 
 
 
@@ -136,15 +151,7 @@ namespace WeatherData.Models
             //    moldOutsideToLogFile = data.CalculateTotalRiskPerDay("Month");
             //}
 
-            Console.WriteLine("Inne");
-            Console.WriteLine(tempInsideToLogFile);
-            Console.WriteLine(humInsideToLogFile);
-            Console.WriteLine(moldInsideToLogFile);
-            Console.WriteLine();
-            Console.WriteLine("Ute");
-            Console.WriteLine(tempOutsideToLogFile);
-            Console.WriteLine(humOutsideToLogFile);
-            Console.WriteLine(moldOutsideToLogFile);
+
 
         }
 
@@ -184,9 +191,9 @@ namespace WeatherData.Models
             string result = "";
             Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
             List<FileData> dataList = Helpers.ReadTextFile(filePath);
-            var filteredData = dataList.Where(x => x.Location == Location).ToList();
+            //var filteredData = dataList.Where(x => x.Location == Location).ToList();
 
-            var groupedData = GroupDataByTimeSpan(filteredData, timeSpan);
+            var groupedData = GroupDataByTimeSpan(dataList, timeSpan);
             foreach (var dayData in groupedData)
             {
                 double risk = CalculateMoldRisk(Math.Round(dayData.Average(y => y.Temperature), 1), Math.Round(dayData.Average(y => y.Humidity), 1));

@@ -12,13 +12,13 @@ namespace WeatherData.Classes
 {
     public static class CustomExtensions
     {
-        public static void ViewBox(this string input)
+        public static void ViewBox(this string input, int startPosY)
         {
-            Console.SetCursorPosition(2, 0);
+            Console.SetCursorPosition(2, startPosY);
             Console.WriteLine('┌' + new String('─', input.Length + 2) + '┐');
-            Console.SetCursorPosition(2, 1);
+            Console.SetCursorPosition(2, startPosY + 1);
             Console.WriteLine("│ " + input + " │");
-            Console.SetCursorPosition(2, 2);
+            Console.SetCursorPosition(2, startPosY + 2);
             Console.WriteLine('└' + new String('─', input.Length + 2) + '┘');
         }
     }

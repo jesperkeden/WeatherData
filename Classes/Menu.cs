@@ -49,6 +49,7 @@ namespace WeatherData.Classes
                 case 0:
                     //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
+                    insideClass.Name.ViewBox(0);
                     insideClass.AvgValues();
                     Console.ReadKey();
                     break;
@@ -57,22 +58,22 @@ namespace WeatherData.Classes
                     //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
          
                     Console.Clear();
-                    insideClass.Name.ViewBox();
+                    insideClass.Name.ViewBox(0);
                     insideClass.MaxMinWeatherDay("Temperature");
                     Console.ReadKey();
                     break;
                 case 2:
                     //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    insideClass.Name.ViewBox();
+                    insideClass.Name.ViewBox(0);
                     insideClass.MaxMinWeatherDay("Humidity");
                     Console.ReadKey();
                     break;
                 case 3:
                     //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
-                    insideClass.Name.ViewBox();
-                    insideClass.CalculateTotalRiskPerDay("");
+                    insideClass.Name.ViewBox(0);
+                    insideClass.CalculateTotalRiskPerTimeSpan("");
                     Console.ReadKey();
                     break;
                 case 4:
@@ -91,42 +92,42 @@ namespace WeatherData.Classes
                 case 0:
                     //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
+                    outsideClass.Name.ViewBox(0);
                     outsideClass.AvgValues();
                     Console.ReadKey();
                     break;
                 case 1:
                     //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
+                    outsideClass.Name.ViewBox(0);
                     outsideClass.MaxMinWeatherDay("Temperature");
                     Console.ReadKey();
                     break;
                 case 2:
                     //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
+                    outsideClass.Name.ViewBox(0);
                     outsideClass.MaxMinWeatherDay("Humidity");
                     Console.ReadKey();
                     break;
                 case 3:
                     //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
-                    outsideClass.CalculateTotalRiskPerDay("");
+                    outsideClass.Name.ViewBox(0);
+                    outsideClass.CalculateTotalRiskPerTimeSpan("");
                     Console.ReadKey();
                     break;
                 case 4:
                     //Console.WriteLine("Datum för meteorologisk höst");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
+                    outsideClass.Name.ViewBox(0);
                     outsideClass.MeteorologicalDate(10);
                     Console.ReadKey();
                     break;
                 case 5:
                     //Console.WriteLine("Datum för meteorologisk vinter(OBS Mild vinter!)");
                     Console.Clear();
-                    outsideClass.Name.ViewBox();
+                    outsideClass.Name.ViewBox(0);
                     outsideClass.MeteorologicalDate(0);
                     Console.ReadKey();
                     break;
