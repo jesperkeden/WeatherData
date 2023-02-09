@@ -103,8 +103,8 @@ namespace WeatherData.Models
 
             foreach (var month in uteData)
             {
-                tempOutsideToLogFile += ($"{month.Key.ToString("MM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
-                humOutsideToLogFile += ($"{month.Key.ToString("MM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
+                tempOutsideToLogFile += ($"Month {month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
+                humOutsideToLogFile += ($"Month {month.Key.ToString()} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
                 //moldOutsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
             }
 
@@ -113,9 +113,8 @@ namespace WeatherData.Models
 
             foreach (var month in inneData)
             {
-
-                tempInsideToLogFile += ($"{month.Key.ToString("MM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
-                humInsideToLogFile += ($"{month.Key.ToString("MM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
+                tempInsideToLogFile += ($"Month {month.Key.ToString()} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
+                humInsideToLogFile += ($"Month {month.Key.ToString()} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
                 //moldInsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
             }
 
@@ -193,7 +192,7 @@ namespace WeatherData.Models
             List<FileData> dataList = Helpers.ReadTextFile(filePath);
             //var filteredData = dataList.Where(x => x.Location == Location).ToList();
 
-            var groupedData = GroupDataByTimeSpan(dataList, timeSpan);
+            var groupedData = GroupDataByTimeSpan(dataList, timeSpan).ToList();
             foreach (var dayData in groupedData)
             {
                 double risk = CalculateMoldRisk(Math.Round(dayData.Average(y => y.Temperature), 1), Math.Round(dayData.Average(y => y.Humidity), 1));
