@@ -8,6 +8,7 @@ using WeatherData.Models;
 
 namespace WeatherData
 {
+    delegate void LogToFileDelegate(string message);
     internal class Program
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
@@ -23,8 +24,58 @@ namespace WeatherData
                 Menu.Start(classList);
 
             }
-            //Data1.CalculateTotalRiskPerDay(filePath, "Ute");
-            //Utomhus.MeteorologicalFall();
+
+
+            StreamWriter file = new StreamWriter("log.txt", true);
+            LogToFileDelegate logToFile = LogToFileDelegate(WriteToFile);
+        }
+        static void WritetoFile(string message)
+        {
+            StreamWriter file = new StreamWriter("log.txt", true);
+            file.WriteLine(message);
+            file.Close();
+        }
+
+        static void AvgTempPerMonth(LogToFileDelegate logToFile)
+        {
+            double avgInside = 5;
+            double avgOutside = 5;
+
+            //Log to file
+            logToFile("avg inside temp per month: " + avgInside);
+            logToFile("avg inside temp per month: " + avgOutside);
+        }
+
+        static void AvgHumPerMonth(LogToFileDelegate logToFile)
+        {
+            double avgInside = 5;
+            double avgOutside = 5;
+
+            //Log to file
+            logToFile("avg inside hum per month: " + avgInside);
+            logToFile("avg inside hum per month: " + avgOutside);
+        }
+
+        static void RiskOfMold(LogToFileDelegate logToFile)
+        {
+            double avgInside = 5;
+            double avgOutside = 5;
+
+            //Log to file
+            logToFile("risk of mold inside: " + avgInside);
+            logToFile("risk of mold outside: " + avgOutside);
+        }
+
+        static void MeteorologicalSeasons(LogToFileDelegate logToFile)
+        {
+            string meteorolocialFallWinter = "";
+            logToFile("Meteorological Fall / Winter occurs: " + meteorolocialFallWinter);
+        }
+
+        static void MoldCalc(LogToFileDelegate logTofile)
+        {
+            //calc på algoritm
+            logTofile("Mold calculation Algorithm: " + "något mer");
         }
     }
 }
