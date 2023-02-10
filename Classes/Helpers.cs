@@ -118,6 +118,9 @@ namespace WeatherData.Classes
         {
 
             List<FileData> logs = Helpers.ReadTextFile(filePath);
+
+            // Initialize dictionaries for average temperature, humidity and mold risk for both inside and outside locations
+
             //Temperature
             Dictionary<string, double> averageTemperatureInne = new Dictionary<string, double>();
             Dictionary<string, double> averageTemperatureUte = new Dictionary<string, double>();
@@ -137,12 +140,16 @@ namespace WeatherData.Classes
             Dictionary<string, double> countRiskUte = new Dictionary<string, double>();
 
 
-
+            // Iterate through each log entry
             foreach (FileData log in logs)
             {
+                // Extract the month from the date-time of the log entry
                 string month = log.DateTime.ToString("MMM");
+
+                // Check if the log entry location is inside or outside
                 if (log.Location == "Inne")
                 {
+                    // If the month does not exist in the dictionary, initialize its values
                     if (!averageTemperatureInne.ContainsKey(month))
                     {
                         averageTemperatureInne[month] = 0;
@@ -153,6 +160,7 @@ namespace WeatherData.Classes
                         countHumidityInne[month] = 0;
                         countRiskInne[month] = 0;
                     }
+                    // Add the values of the log entry to the corresponding month in the dictionaries
                     averageTemperatureInne[month] += log.Temperature;
                     averageHumidityInne[month] += log.Humidity;
                     averageRiskInne[month] += log.RiskPercentage;
@@ -163,6 +171,7 @@ namespace WeatherData.Classes
                 }
                 else
                 {
+                    // If the month does not exist in the dictionary, initialize its values
                     if (!averageTemperatureUte.ContainsKey(month))
                     {
                         averageTemperatureUte[month] = 0;
@@ -173,6 +182,7 @@ namespace WeatherData.Classes
                         countHumidityUte[month] = 0;
                         countRiskUte[month] = 0;
                     }
+                    // Add the values of the log entry to the corresponding month in the dictionaries
                     averageTemperatureUte[month] += log.Temperature;
                     averageHumidityUte[month] += log.Humidity;
                     averageRiskUte[month] += log.RiskPercentage;
@@ -182,7 +192,7 @@ namespace WeatherData.Classes
                     countRiskUte[month]++;
                 }
             }
-
+            // Calculate the average values of temperature, humidity and risk from Inside, and writes the result to the output file.
             foreach (var entry in averageTemperatureInne)
             {
                 string month = entry.Key;
@@ -191,6 +201,7 @@ namespace WeatherData.Classes
                 averageRiskInne[month] /= countRiskInne[month];
             }
 
+            // Calculate the average values of temperature, humidity and risk from Outside, and writes the result to the output file.
             foreach (var entry in averageTemperatureUte)
             {
                 string month = entry.Key;
