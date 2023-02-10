@@ -13,6 +13,7 @@ using WeatherData.Classes;
 using static WeatherData.Classes.Helpers;
 using System.Security.Cryptography.X509Certificates;
 using System.Globalization;
+using System.IO;
 
 namespace WeatherData.Models
 {
@@ -22,26 +23,20 @@ namespace WeatherData.Models
         public string Name { get; set; }
 
         void AvgValues();
-        void MaxMinWeatherDay(string chooseOrderBy);
-        //string CalculateTotalRiskPerTimeSpan(string timeSpan);
-        //List<string> CalculateTotalRiskPerTimeSpan(string timeSpan);
         void MeteorologicalDate(int temp);
+        void ShowTemperature(string location);
+        void ShowHumidity(string location);
+        void ShowMold(string location);
+
     }
     public class Data1
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
+        private const string outPath = "../../../Data/test.txt";
         public string? Location { get; set; }
         public string Name { get; set; }
 
-        public static List<iMeasurable> CreateData()
-        {
-            List<iMeasurable> data = new List<iMeasurable>();
-            data.Add(new Inomhus() { Location = "Inne", Name = "Inside" });
-            data.Add(new Utomhus() { Location = "Ute", Name = "Outside" });
 
-            return data;
-        }
-        // Search for a specific Date
         public virtual void AvgValues()
         {
             List<FileData> dataList = new List<FileData>();
@@ -81,260 +76,79 @@ namespace WeatherData.Models
             }
 
 
-        }
-        public static void Test()
+        }      
+        public virtual void ShowTemperature(string location)
         {
-            Data1 data = new();
-            List<FileData> dataList = new List<FileData>();
-            dataList = Helpers.ReadTextFile(filePath);
-            //string ute = "Ute";
-            //string inne = "Inne";
+            List<FileData> files = new List<FileData>();
+            files = Helpers.ReadTextFile(filePath);
+            var groupedData = files.Where(x => x.Location == location)
+            .GroupBy(x => x.Location);
 
-            string tempInsideToLogFile = "";
-            string tempOutsideToLogFile = "";
-
-            string humInsideToLogFile = "";
-            string humOutsideToLogFile = "";
-
-            string moldInsideToLogFile = "";
-            string moldOutsideToLogFile = "";
-
-            List<FileData> filterUte = dataList.Where(d => d.Location == "Ute").ToList();
-            var uteData = filterUte.GroupBy(d => d.DateTime.Month);
-
-            foreach (var month in uteData)
+            foreach (var group in groupedData)
             {
-                tempOutsideToLogFile += ($"Month {month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
-                humOutsideToLogFile += ($"Month {month.Key.ToString()} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
-                //moldOutsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
+                Console.WriteLine("Location: " + group.Key);
+                Console.WriteLine("   Date\t      Avg Temp");
+
+                var groupedByDate = group.GroupBy(x => x.DateTime.Date)
+                    .OrderByDescending(g => g.Average(x => x.Temperature));
+
+                foreach (var dateGroup in groupedByDate)
+                {
+                    var avgTemp = dateGroup.Average(x => x.Temperature);
+                    Console.WriteLine("{0}\t{1:0.0}", dateGroup.Key.ToShortDateString(), avgTemp);
+                }
+
+                Console.WriteLine();
             }
-
-            List<FileData> filterInne = dataList.Where(d => d.Location == "Inne").ToList();
-            var inneData = filterInne.GroupBy(d => d.DateTime.Month);
-
-            foreach (var month in inneData)
-            {
-                tempInsideToLogFile += ($"Month {month.Key.ToString()} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C\n");
-                humInsideToLogFile += ($"Month {month.Key.ToString()} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C\n");
-                //moldInsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
-            }
-
-            ("Outside").ViewBox(0);
-            //moldOutsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
-            Console.WriteLine(new String('-', 35));
-            Console.WriteLine("Ute");
-            Console.WriteLine(tempOutsideToLogFile);
-            Console.WriteLine(new String('-', 35));
-            Console.WriteLine(humOutsideToLogFile);
-            //Console.WriteLine(moldOutsideToLogFile);
-            ("Inside").ViewBox(35);
-            //moldInsideToLogFile = data.CalculateTotalRiskPerTimeSpan("Month");
-            Console.WriteLine(new String('-', 35));
-            Console.WriteLine("Inne");
-            Console.WriteLine(tempInsideToLogFile);
-            Console.WriteLine(new String('-', 35));
-            Console.WriteLine(humInsideToLogFile);
-            //Console.WriteLine(moldInsideToLogFile);
-
-
-
-            //foreach (var month in monthData)
-            //{
-            //    location = "Inne";
-            //    tempInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature inside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
-            //    humInsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity inside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
-            //    moldInsideToLogFile = data.CalculateTotalRiskPerDay("Month");
-
-            //    location = "Ute";
-            //    tempOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average temperature outside: {Math.Round(month.Average(y => y.Temperature), 1)}°C");
-            //    humOutsideToLogFile = ($"{month.Key.ToString("MMMM")} - Average humidity outside: {Math.Round(month.Average(y => y.Humidity), 1)}°C");
-            //    moldOutsideToLogFile = data.CalculateTotalRiskPerDay("Month");
-            //}
-
-
-
         }
-
-        // Warm/Cold || Wet/Dry
-        public virtual void MaxMinWeatherDay(string chooseOrderBy)
+        public virtual void ShowHumidity(string location)
         {
-            List<FileData> dataList = new List<FileData>();
-            dataList = Helpers.ReadTextFile(filePath);
-            var filteredData = dataList.Where(x => x.Location == Location).ToList();
-            var dayData = filteredData.GroupBy(x => x.DateTime.Date);
-            var sortedData = dayData;
+            List<FileData> files = new List<FileData>();
+            files = Helpers.ReadTextFile(filePath);
+            var groupedData = files.Where(x => x.Location == location)
+            .GroupBy(x => x.Location);
 
-            if (chooseOrderBy == "Temperature")
+            foreach (var group in groupedData)
             {
-                sortedData = dayData.OrderByDescending(x => x.Average(y => y.Temperature));
-            }
-            else if (chooseOrderBy == "Humidity")
-            {
-                sortedData = dayData.OrderByDescending(x => x.Average(y => y.Humidity));
-            }
+                Console.WriteLine("Location: " + group.Key);
+                Console.WriteLine("   Date\t    Avg Humidity");
 
-            foreach (var item in sortedData)
-            {
-                if (chooseOrderBy == "Temperature")
+                var groupedByDate = group.GroupBy(x => x.DateTime.Date)
+                    .OrderByDescending(g => g.Average(x => x.Humidity));
+
+                foreach (var dateGroup in groupedByDate)
                 {
-                    Console.WriteLine($"{item.Key.ToString("dd MMM")} - Average temperature: {Math.Round(item.Average(y => y.Temperature), 1)}°C");
+                    var avgHum = dateGroup.Average(x => x.Humidity);
+                    Console.WriteLine("{0}\t{1:0.0}", dateGroup.Key.ToShortDateString(), avgHum);
                 }
-                if (chooseOrderBy == "Humidity")
-                {
-                    Console.WriteLine($"{item.Key.ToString("dd MMM")} - Average humidity: {Math.Round(item.Average(y => y.Humidity), 1)}%");
-                }
+
+                Console.WriteLine();
             }
         }
-        // Sort by risk of mold 
-        //public virtual List<string> CalculateTotalRiskPerTimeSpan(string timeSpan)
-        //{
-        //    //string result = "";
-        //    Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
-        //    List<FileData> dataList = Helpers.ReadTextFile(filePath);
-        //    //var filteredData = dataList.Where(x => x.Location == Location).ToList();
-
-        //    var groupedData = GroupDataByTimeSpan(dataList, timeSpan).ToList();
-        //    foreach (var dayData in groupedData)
-        //    {
-        //        double risk = CalculateMoldRisk(Math.Round(dayData.Average(y => y.Temperature), 1), Math.Round(dayData.Average(y => y.Humidity), 1));
-        //        var parsedDate = GetParsedDate(dayData.Key, timeSpan);
-        //        riskList.Add(parsedDate, risk);
-        //    }
-
-        //    var sortedRiskList = riskList.OrderByDescending(x => x.Value);
-        //    List<string> results2 = new List<string>();
-        //    foreach (var dayD in sortedRiskList)
-        //    {
-        //        string result = (dayD.Key.ToString("MMMM") + " - Total risk of mold: " + dayD.Value + "%");
-        //        Console.WriteLine(result);
-        //        results2.Add(result);
-        //    }
-
-        //    return results2;
-        //}
-        //public static void koko()
-        //{
-        //    List<FileData> dataList = Helpers.ReadTextFile(filepath);
-        //    var avgValuesForEachDay = GetAverageValueForEachDay(dataList);
-
-        //    foreach (var dayData in avgValuesForEachDay)
-        //    {
-        //        Console.WriteLine("For day " + dayData.Key.ToString("dd-MM") + " the average temperature is " + dayData.Value.Item1 + " and the average humidity is: " + dayData.Value.Item2);
-        //    }
-        //    var avgValuesForEachMonth = GetAverageValueForEachMonth(dataList);
-        //    Console.WriteLine("For the month the average is: " avgValuesForEachMonth);
-
-        //}
-
-        //public static Dictionary<DateTime, double> CalculateDailyRisk(List<FileData> dataList, string timeSpan)
-        //{
-        //    Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
-
-        //    var groupedData = GroupDataByTimeSpan(dataList, timeSpan).ToList();
-        //    foreach (var dayData in groupedData)
-        //    {
-        //        double risk = CalculateMoldRisk(Math.Round(dayData.Average(y => y.Temperature), 1), Math.Round(dayData.Average(y => y.Humidity), 1));
-        //        var parsedDate = GetParsedDate(dayData.Key, timeSpan);
-        //    }
-        //    return riskList;
-        //}
-
-        //public static  Dictionary<DateTime, double> CalculateMonthlyRisk(List<FileData> dataList)
-        //{
-        //    Dictionary<DateTime, double> riskList = new Dictionary<DateTime, double>();
-        //    var groupedData = dataList.GroupBy(x => new DateTime(x.DateTime.Year, x.DateTime.Month, 1));
-
-        //    foreach (var monthData in groupedData)
-        //    {
-        //        double risk = CalculateMoldRisk(Math.Round(monthData.Average(y => y.Temperature), 1), Math.Round(monthData.Average(y => y.Humidity), 1));
-        //        var date = new DateTime(monthData.Key.Year, monthData.Key.Month, 1);
-        //        riskList.Add(date, risk);
-        //    }
-        //    return riskList;
-        //}
-
-
-        //private static IEnumerable<IGrouping<DateTime, FileData>> GroupDataByTimeSpan(List<FileData> data, string timeSpan)
-        //{
-        //    if (timeSpan == "Month")
-        //    {
-        //        return data.GroupBy(x => new DateTime(x.DateTime.Year, x.DateTime.Month, 1));
-        //    }
-        //    else
-        //    {
-        //        return data.GroupBy(x => x.DateTime.Date);
-        //    }
-        //}
-
-        private static DateTime GetParsedDate(DateTime key, string timeSpan)
+        public virtual void ShowMold(string location)
         {
-            if (timeSpan == "Month")
+            List<FileData> files = new List<FileData>();
+            files = Helpers.ReadTextFile(filePath);
+            var groupedData = files.Where(x => x.Location == location)
+            .GroupBy(x => x.Location);
+
+            foreach (var group in groupedData)
             {
-                return new DateTime(key.Year, key.Month, 1);
-            }
-            else
-            {
-                return key.Date;
+                Console.WriteLine("Location: " + group.Key);
+                Console.WriteLine("   Date\t    Risk of Mold");
+
+                var groupedByDate = group.GroupBy(x => x.DateTime.Date)
+                    .OrderByDescending(g => g.Average(x => x.RiskPercentage));
+
+                foreach (var dateGroup in groupedByDate)
+                {
+                    var riskForMold = dateGroup.Average(x => x.RiskPercentage);
+                    Console.WriteLine("{0}\t{1:0.0}%", dateGroup.Key.ToShortDateString(), riskForMold);
+                }
+
+                Console.WriteLine();
             }
         }
-
-        // Calculate the risk of mold
-        public static double CalculateMoldRisk(double temp, double hum)
-        {
-            double risk = 0;
-
-            if ((temp > 0 && temp < 10) && (hum > 95 && hum <= 100))
-            {
-                risk = 100;
-            }
-            else if (temp < 0 || hum < 75)
-            {
-                risk = 0;
-                return risk;
-            }
-            else
-            {
-                //TEMP
-                if (temp < 10)
-                {
-                    risk += 20;
-                }
-
-                if (temp < 20)
-                {
-                    risk += 15;
-                }
-
-                if (temp < 30)
-                {
-                    risk += 10;
-                }
-
-                if (temp < 40)
-                {
-                    risk += 5;
-                }
-
-                //HUM
-                if (hum > 80)
-                {
-                    risk += 10;
-                }
-
-                else if (hum > 90)
-                {
-                    risk += 15;
-                }
-
-                else if (hum > 95)
-                {
-                    risk += 20;
-                }
-            }
-
-            return risk;
-        }
-
         public static Dictionary<DateTime, double> CreateDicForAutumn()
         {
             string filePath = "../../../Data/tempdata5-med fel.txt";
@@ -357,7 +171,6 @@ namespace WeatherData.Models
             return autumnList;
 
         }
-
 
     }
     public class Inomhus : Data1, iMeasurable
@@ -393,11 +206,11 @@ namespace WeatherData.Models
                             tempCount = 0;
                         }
                     }
-
                 }
             }
-            Console.WriteLine("Meterological " + (temp == 10 ? "fall" : "winter") + " occurs on the " + startDate.ToString("dd MMM"));
+            string result = ("Meterological " + (temp == 10 ? "fall" : "winter") + " occurs on the " + startDate.ToString("dd MMM"));
+            Console.WriteLine(result); //Gjorde till result, men oklart hur jag ska norpa den till PrintToFile(); utan att göra om denna
+            //till en string samt static.
         }
-
     }
 }

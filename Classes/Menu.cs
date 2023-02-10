@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherData.Models;
+using static WeatherData.Models.Utomhus;
 using static WeatherData.Classes.CustomExtensions;
 
 namespace WeatherData.Classes
@@ -47,37 +48,30 @@ namespace WeatherData.Classes
             switch (selectedIndex)
             {
                 case 0:
-                    //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
-                    insideClass.Name.ViewBox(0);
+                    //insideClass.Name.ViewBox(0);
                     insideClass.AvgValues();
                     Console.ReadKey();
                     break;
-                case 1:
-                    //HotNCold();
-                    //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
-         
+                case 1:     
                     Console.Clear();
-                    insideClass.Name.ViewBox(0);
-                    insideClass.MaxMinWeatherDay("Temperature");
+                    //insideClass.Name.ViewBox(0);
+                    insideClass.ShowTemperature("Inne");
                     Console.ReadKey();
                     break;
                 case 2:
-                    //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    insideClass.Name.ViewBox(0);
-                    insideClass.MaxMinWeatherDay("Humidity");
+                    //insideClass.Name.ViewBox(0);
+                    insideClass.ShowHumidity("Inne");
                     Console.ReadKey();
                     break;
                 case 3:
-                    //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
-                    insideClass.Name.ViewBox(0);
-                    //insideClass.CalculateTotalRiskPerTimeSpan("");
+                    //insideClass.Name.ViewBox(0);
+                    insideClass.ShowMold("Inne");
                     Console.ReadKey();
                     break;
                 case 4:
-                    // Back to RunMainMenu
                     break;
             }
         }
@@ -90,49 +84,42 @@ namespace WeatherData.Classes
             switch (selectedIndex)
             {
                 case 0:
-                    //Console.WriteLine("Medeltemperatur för valt datum (sökmöjlighet med validering)");
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
+                    //outsideClass.Name.ViewBox(0);
                     outsideClass.AvgValues();
                     Console.ReadKey();
                     break;
                 case 1:
-                    //Console.WriteLine("Sortering av varmast till kallaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
-                    outsideClass.MaxMinWeatherDay("Temperature");
+                    //outsideClass.Name.ViewBox(0);
+                    outsideClass.ShowTemperature("Ute");
                     Console.ReadKey();
                     break;
                 case 2:
-                    //Console.WriteLine("Sortering av torrast till fuktigaste dagen enligt medeltemperatur per dag");
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
-                    outsideClass.MaxMinWeatherDay("Humidity");
+                    //outsideClass.Name.ViewBox(0);
+                    outsideClass.ShowHumidity("Ute");
                     Console.ReadKey();
                     break;
                 case 3:
-                    //Console.WriteLine("Sortering av minst till störst risk av mögel");
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
-                    //outsideClass.CalculateTotalRiskPerTimeSpan("");
+                    //outsideClass.Name.ViewBox(0);
+                    outsideClass.ShowMold("Ute");
                     Console.ReadKey();
                     break;
                 case 4:
-                    //Console.WriteLine("Datum för meteorologisk höst");
                     Console.Clear();
                     outsideClass.Name.ViewBox(0);
                     outsideClass.MeteorologicalDate(10);
                     Console.ReadKey();
                     break;
                 case 5:
-                    //Console.WriteLine("Datum för meteorologisk vinter(OBS Mild vinter!)");
                     Console.Clear();
                     outsideClass.Name.ViewBox(0);
                     outsideClass.MeteorologicalDate(0);
                     Console.ReadKey();
                     break;
                 case 6:
-                    // Back to RunMainMenu
                     break;
             }
         }
