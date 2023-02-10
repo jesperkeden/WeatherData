@@ -53,28 +53,34 @@ namespace WeatherData.Models
                 if (Location == "Inne")
                 {
                     Console.WriteLine(new String('=', 30));
-                    Console.WriteLine("Average temperature inside: " + Math.Round(dataAvgTemp, 2));
+                    Console.WriteLine("\nAverage temperature inside: " + Math.Round(dataAvgTemp, 2) + "°C");
                 }
                 // Show the average temperature and humidity for the location "Ute"
                 else if (Location == "Ute")
                 {
                     Console.WriteLine(new String('=', 30));
-                    Console.WriteLine("Average temperature outside: " + Math.Round(dataAvgTemp, 2));
+                    Console.WriteLine("\nAverage temperature outside: " + Math.Round(dataAvgTemp, 2) + "°C");
                     Console.WriteLine(new String('-', 30));
-                    Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2));
+                    Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2) + "%");
                 }
                 else
                 {
                     // In case the location does not match "Inne" or "Ute"
+                    Console.WriteLine();
                     Console.WriteLine(new String('-', 30));
                     Console.WriteLine("Couldn't find any data from inside or outside on that day.");
+                    Console.ReadKey();
+                    Console.Clear();
                 }
             }
             // If there is no data with the specified date and location
             else
             {
+                Console.WriteLine();
                 Console.WriteLine(new String('-', 30));
                 Console.WriteLine("Couldn't find any data.");
+                Console.ReadKey();
+                Console.Clear();
             }
         }
 

@@ -25,17 +25,30 @@ namespace WeatherData.Classes
 
             if (!Regex.IsMatch(date, pattern))
             {
-                Console.WriteLine("Invalid date format.");
                 return false;
             }
 
-            inputDate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            try
+            {
+                inputDate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+            catch (FormatException)
+            {
+                Console.Clear();
+                Console.WriteLine("Did you try a date that doesn't exist?");
+                Console.Clear();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
+            }
+
+
             if (inputDate >= earliest && inputDate <= latest)
             {
                 return true;
             }
-
-            Console.WriteLine("No data available for the input date");
             return false;
         }
         public static DateTime PromptUserForDate()
@@ -47,10 +60,18 @@ namespace WeatherData.Classes
                 if (IsValidDate(input, out var inputDate))
                 {
                     Console.Clear();
-                    Console.WriteLine("Valid date entered: " + inputDate.ToString("yyyy-MM-dd"));
+                    ("Valid date entered: ").ViewBox(0, inputDate.ToString("yyyy-MM-dd"));
+                    Thread.Sleep(1000);
+
                     return inputDate;
                 }
-                Console.WriteLine("Invalid date format. Enter a date in yyyy-mm-dd format:");
+                else
+                {
+                    ("Invalid date format: ").ViewBox(3, (input == string.Empty ? "No date selected" : input));
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+                Console.WriteLine("Enter a date in yyyy-mm-dd format:");
                 input = Console.ReadLine();
             }
         }
@@ -118,7 +139,7 @@ namespace WeatherData.Classes
         }
         public static void PrintToFile()
         {
-            
+
             List<FileData> logs = Helpers.ReadTextFile(filePath);
 
             // Initialize dictionaries for average temperature, humidity and mold risk for both inside and outside locations
