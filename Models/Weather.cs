@@ -98,10 +98,10 @@ namespace WeatherData.Models
             foreach (var group in groupedData)
             {
                 // Write the location name to the console
-                Console.WriteLine("     Location: " + group.Key);
-                Console.WriteLine("     --------");
+                ("Location: " + group.Key).ViewBox(0, "");
                 // Write the header for the temperature data to the console
                 Console.WriteLine("\n   Date\t      Avg Temp");
+                Console.WriteLine(new String('-', 22));
 
                 // Group the data in the current group by date
                 var groupedByDate = group.GroupBy(x => x.DateTime.Date)
@@ -137,9 +137,9 @@ namespace WeatherData.Models
             // Loop through each location group
             foreach (var group in groupedData)
             {
-                Console.WriteLine("     Location: " + group.Key);
-                Console.WriteLine("     --------");
+                ("Location: " + group.Key).ViewBox(0, "");
                 Console.WriteLine("\n   Date\t    Avg Humidity");
+                Console.WriteLine(new String('-', 24));
 
                 // Group the data by date
                 var groupedByDate = group.GroupBy(x => x.DateTime.Date)
@@ -175,9 +175,9 @@ namespace WeatherData.Models
             foreach (var group in groupedData)
             {
                 // Write the location to the console
-                Console.WriteLine("     Location: " + group.Key);
-                Console.WriteLine("     --------");
+                ("Location: " + group.Key).ViewBox(0, "");
                 Console.WriteLine("\n   Date\t    Risk of Mold");
+                Console.WriteLine(new String('-', 24));
 
                 // Group the data by date
                 var groupedByDate = group.GroupBy(x => x.DateTime.Date)
