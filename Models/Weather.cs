@@ -52,13 +52,11 @@ namespace WeatherData.Models
                 // Show the average temperature for the location "Inne"
                 if (Location == "Inne")
                 {
-                    Console.WriteLine(new String('=', 30));
                     Console.WriteLine("\nAverage temperature inside: " + Math.Round(dataAvgTemp, 2) + "°C");
                 }
                 // Show the average temperature and humidity for the location "Ute"
                 else if (Location == "Ute")
                 {
-                    Console.WriteLine(new String('=', 30));
                     Console.WriteLine("\nAverage temperature outside: " + Math.Round(dataAvgTemp, 2) + "°C");
                     Console.WriteLine(new String('-', 30));
                     Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2) + "%");
