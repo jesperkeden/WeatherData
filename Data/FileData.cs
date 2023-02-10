@@ -16,14 +16,7 @@ namespace WeatherData.Data
         public double Humidity { get; set; }
         public double Temperature { get; set; }
         public double RiskPercentage { get; set; }
-        public static List<iMeasurable> CreateData()
-        {
-            List<iMeasurable> data = new List<iMeasurable>();
-            data.Add(new Inomhus() { Location = "Inne", Name = "Inside" });
-            data.Add(new Utomhus() { Location = "Ute", Name = "Outside" });
 
-            return data;
-        }
         public FileData(string location, double temperature, double humidity, DateTime date)
         {
             this.Location = location;
@@ -91,51 +84,6 @@ namespace WeatherData.Data
             }
 
             return risk;
-        }
-
-        public static void GroupByLocationAndPrintAvg(List<FileData> data)
-        {
-            var groupedData1 = data.Where(x => x.Location == "Ute")
-                                   .GroupBy(x => x.Location);
-
-
-            var groupedData = data.GroupBy(x => x.Location);
-
-            foreach (var group in groupedData1)
-            {
-                Console.WriteLine("Location: " + group.Key);
-                Console.WriteLine("   Date\t      Avg Temp\t      Avg Hum\t    Risk of mold");
-
-                var groupedByDate = group.GroupBy(x => x.DateTime.Date)
-                    .OrderByDescending(g => g.Average(x => x.Temperature)); //sortera efter hum/temp/date HÄR
-
-                foreach (var dateGroup in groupedByDate)
-                {
-                    var avgTemp = dateGroup.Average(x => x.Temperature);
-                    var avgHum = dateGroup.Average(x => x.Humidity);
-                    var avgRisk = dateGroup.Average(x => x.RiskPercentage);
-                    Console.WriteLine("{0}\t{1:0.0}\t\t{2:0.0}\t\t{3:0}%", dateGroup.Key.ToShortDateString(), avgTemp, avgHum, avgRisk);
-                }
-
-                Console.WriteLine();
-            }
-        }
-        public static void GroupByMonthAndPrintAvg(List<FileData> fileDataList)
-        {
-            var groupedData = fileDataList.GroupBy(data => data.DateTime.Month)
-                .Select(group => new
-                {
-                    Month = group.Key,
-                    AverageRiskPercentage = group.Average(data => data.RiskPercentage)
-                });
-
-            Console.WriteLine("Month\t\tAverage Risk Percentage");
-            Console.WriteLine("---------------------------------------------");
-
-            foreach (var group in groupedData)
-            {
-                Console.WriteLine("{0}\t\t{1}", group.Month, Math.Round(group.AverageRiskPercentage, 2));
-            }
         }
 
     }

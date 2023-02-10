@@ -1,33 +1,36 @@
-﻿using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
-using WeatherData.Classes;
+﻿using System.Data;
+using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Text;
+using System.Threading.Tasks;
+using static WeatherData.Data.FileData;
 using WeatherData.Data;
+using static WeatherData.Program;
+using System.Collections.Immutable;
+using WeatherData.Classes;
+using static WeatherData.Classes.Helpers;
+using System.Security.Cryptography.X509Certificates;
+using System.Globalization;
+using System.IO;
 using WeatherData.Models;
-
-
 
 namespace WeatherData
 {
-    //delegate void LogToFileDelegate(string message);
     internal class Program
     {
         static void Main(string[] args)
         {
-            //Console.CursorVisible = false;
-            //bool runProgram = true;
+            Console.CursorVisible = false;
+            bool runProgram = true;
+            WriteFileDel delPrint = PrintToFile;
 
-            //while (runProgram)
-            //{
-            //    List<iMeasurable> classList = Models.Data.CreateData();
+            delPrint();
+            while (runProgram)
+            {
+                List<iMeasurable> classList = Weather.CreateData();
 
-            //    Menu.Start(classList);
-
-            //}
-
-            Helpers.PrintToFile();
-            
-
+                Menu.Start(classList);
+            }
         }
     }
 }
