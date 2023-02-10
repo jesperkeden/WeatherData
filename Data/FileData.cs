@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WeatherData.Classes;
+using WeatherData.Models;
 
 namespace WeatherData.Data
 {
@@ -15,7 +16,14 @@ namespace WeatherData.Data
         public double Humidity { get; set; }
         public double Temperature { get; set; }
         public double RiskPercentage { get; set; }
+        public static List<iMeasurable> CreateData()
+        {
+            List<iMeasurable> data = new List<iMeasurable>();
+            data.Add(new Inomhus() { Location = "Inne", Name = "Inside" });
+            data.Add(new Utomhus() { Location = "Ute", Name = "Outside" });
 
+            return data;
+        }
         public FileData(string location, double temperature, double humidity, DateTime date)
         {
             this.Location = location;

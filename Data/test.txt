@@ -35,3 +35,10 @@ dec.	Inside: 15.69	Outside: 48.97
 Meterological Fall
 ------------------
 
+Meterological fall occurs on the 03 okt.
+
+------------------
+Meterological Winter
+------------------
+
+Meterological winter occurs on the 23 dec.
