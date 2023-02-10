@@ -1,0 +1,108 @@
+---------------
+Avg Temperature
+---------------
+juni	Inside: 24.70°C		Outside: 15.85°C
+juli	Inside: 26.28°C		Outside: 20.24°C
+aug.	Inside: 25.57°C		Outside: 18.07°C
+sep.	Inside: 23.31°C		Outside: 16.16°C
+okt.	Inside: 22.42°C		Outside: 8.18°C
+nov.	Inside: 22.78°C		Outside: 3.31°C
+dec.	Inside: 21.84°C		Outside: 2.51°C
+
+------------
+Avg Humidity
+------------
+juni	Inside: 28.76%		Outside: 53.21%
+juli	Inside: 41.63%		Outside: 52.99%
+aug.	Inside: 34.60%		Outside: 48.60%
+sep.	Inside: 41.60%		Outside: 60.43%
+okt.	Inside: 27.27%		Outside: 64.58%
+nov.	Inside: 19.07%		Outside: 83.49%
+dec.	Inside: 15.82%		Outside: 77.93%
+
+---------------------------
+Avg Risk for mold per month
+---------------------------
+juni	Inside: 15.00%		Outside: 32.44%
+juli	Inside: 15.00%		Outside: 22.63%
+aug.	Inside: 15.00%		Outside: 25.84%
+sep.	Inside: 15.00%		Outside: 27.59%
+okt.	Inside: 15.01%		Outside: 46.48%
+nov.	Inside: 15.03%		Outside: 57.87%
+dec.	Inside: 15.69%		Outside: 48.97%
+
+------------------
+Meterological Fall
+------------------
+
+Meterological fall occurs on the 03 okt.
+
+--------------------
+Meterological Winter
+--------------------
+
+Meterological winter occurs on the 23 dec.
+
+-----------------------------------
+Algorithm for calculating Mold Risk
+-----------------------------------
+
+  public static double CalculateMoldRisk(double temp, double hum)
+        {
+            double risk = 0;
+
+            if (temp > 0 && temp < 10 && hum > 95 && hum <= 100)
+            {
+                risk = 100;
+            }
+            else if (temp < 0 && hum < 75)
+            {
+                risk = 0;
+                return risk;
+            }
+            else
+            {
+                //TEMP
+                if (temp < 10)
+                {
+                    risk += 20;
+                }
+
+                if (temp < 20)
+                {
+                    risk += 15;
+                }
+
+                if (temp < 30)
+                {
+                    risk += 10;
+                }
+
+                else if (temp < 40)
+                {
+                    risk += 5;
+                }
+
+                //HUM
+                if (hum < 79)
+                {
+                    risk += 5;
+                }
+                if (hum > 80)
+                {
+                    risk += 10;
+                }
+
+                if (hum > 90)
+                {
+                    risk += 15;
+                }
+
+                else if (hum > 95)
+                {
+                    risk += 20;
+                }
+            }
+
+            return risk;
+        }

@@ -24,9 +24,15 @@ namespace WeatherData.Models
         private const string outPath = "../../../Data/test.txt";
         public string? Location { get; set; }
         public string Name { get; set; }
+        public static List<iMeasurable> CreateData()
+        {
+            List<iMeasurable> data = new List<iMeasurable>();
+            data.Add(new Inomhus() { Location = "Inne", Name = "Inside" });
+            data.Add(new Utomhus() { Location = "Ute", Name = "Outside" });
 
+            return data;
+        }
         public virtual string MeteorologicalDate(int temp) { string nothing = string.Empty; return nothing; }
-        // Method to show the average temperature for a specific date and location
         public virtual void AvgValuesSearchDate()
         {
             List<FileData> dataList = new List<FileData>();
@@ -151,8 +157,10 @@ namespace WeatherData.Models
         {
             // Initialize a list to store the file data
             List<FileData> files = new List<FileData>();
+
             // Read the text file and store its contents in the `files` list
             files = Helpers.ReadTextFile(filePath);
+
             // Group the data by location
             var groupedData = files.Where(x => x.Location == Location)
             .GroupBy(x => x.Location);
@@ -182,7 +190,7 @@ namespace WeatherData.Models
             }
         }
 
-        // Method to create a dictionary of average temperature values for the autumn season
+        // Method to create a dictionary of average temperature values for meteorological Date (Fall/Winter)
         public static Dictionary<DateTime, double> CreateDicForMeteorologicalDate()
         {
             // File path for the data file

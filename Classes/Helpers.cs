@@ -13,7 +13,8 @@ namespace WeatherData.Classes
     internal class Helpers
     {
         private const string filePath = "../../../Data/tempdata5-med fel.txt";
-        private const string outPath = "../../../Data/test.txt";
+        private const string outPath = "../../../Data/Log.txt";
+        public delegate void WriteFileDel();
 
         static bool IsValidDate(string date, out DateTime inputDate)
         {
@@ -40,7 +41,7 @@ namespace WeatherData.Classes
         public static DateTime PromptUserForDate()
         {
             Console.WriteLine("Enter a date in yyyy-mm-dd format:");
-            string input = Console.ReadLine();
+            string? input = Console.ReadLine();
             while (true)
             {
                 if (IsValidDate(input, out var inputDate))
@@ -66,7 +67,7 @@ namespace WeatherData.Classes
             {
                 using (StreamReader reader = new StreamReader(filePath))
                 {
-                    string line;
+                    string? line = string.Empty;
                     while ((line = reader.ReadLine()) != null)
                     {
                         Match match = Regex.Match(line, @"(\d{4})([-.])(0[1-9]|1[0-2])([-.])(0[1-9]|[1-2][0-9]|3[0-1])([\w\s])(0[0-9]|1[0-9]|2[0-3])([:;.,-_])([0-5][0-9])([:;.,-_])([0-5][0-9]),([Inne|Ute]+),(-?\d+[\W\S]?\d*?),(-?\d+[\W\S]?\d+)?$");
@@ -117,7 +118,7 @@ namespace WeatherData.Classes
         }
         public static void PrintToFile()
         {
-
+            
             List<FileData> logs = Helpers.ReadTextFile(filePath);
 
             // Initialize dictionaries for average temperature, humidity and mold risk for both inside and outside locations
@@ -224,8 +225,8 @@ namespace WeatherData.Classes
                     double avgUteTemp = averageTemperatureUte[month];
 
                     writer.WriteLine(month + "\t" +
-                        "Inside: " + avgInneTemp.ToString("0.00", CultureInfo.InvariantCulture) + "\t" +
-                        "Outside: " + avgUteTemp.ToString("0.00", CultureInfo.InvariantCulture));
+                        "Inside: " + avgInneTemp.ToString("0.00", CultureInfo.InvariantCulture) + "°C\t\t" +
+                        "Outside: " + avgUteTemp.ToString("0.00", CultureInfo.InvariantCulture) + "°C");
                 }
 
                 writer.WriteLine("");
@@ -239,8 +240,8 @@ namespace WeatherData.Classes
                     double avgUteHum = averageHumidityUte[month];
 
                     writer.WriteLine(month + "\t" +
-                        "Inside: " + avgInneHum.ToString("0.00", CultureInfo.InvariantCulture) + "\t" +
-                        "Outside: " + avgUteHum.ToString("0.00", CultureInfo.InvariantCulture));
+                        "Inside: " + avgInneHum.ToString("0.00", CultureInfo.InvariantCulture) + "%\t\t" +
+                        "Outside: " + avgUteHum.ToString("0.00", CultureInfo.InvariantCulture) + "%");
                 }
 
                 writer.WriteLine("");
@@ -254,8 +255,8 @@ namespace WeatherData.Classes
                     double avgUteRisk = averageRiskUte[month];
 
                     writer.WriteLine(month + "\t" +
-                        "Inside: " + avgInneRisk.ToString("0.00", CultureInfo.InvariantCulture) + "\t" +
-                        "Outside: " + avgUteRisk.ToString("0.00", CultureInfo.InvariantCulture));
+                        "Inside: " + avgInneRisk.ToString("0.00", CultureInfo.InvariantCulture) + "%\t\t" +
+                        "Outside: " + avgUteRisk.ToString("0.00", CultureInfo.InvariantCulture) + "%");
                 }
 
                 Utomhus utomHus = new();
@@ -279,7 +280,66 @@ namespace WeatherData.Classes
                 writer.WriteLine("Algorithm for calculating Mold Risk");
                 writer.WriteLine("-----------------------------------");
                 writer.WriteLine();
+                string algorithm = @"  public static double CalculateMoldRisk(double temp, double hum)
+        {
+            double risk = 0;
 
+            if (temp > 0 && temp < 10 && hum > 95 && hum <= 100)
+            {
+                risk = 100;
+            }
+            else if (temp < 0 && hum < 75)
+            {
+                risk = 0;
+                return risk;
+            }
+            else
+            {
+                //TEMP
+                if (temp < 10)
+                {
+                    risk += 20;
+                }
+
+                if (temp < 20)
+                {
+                    risk += 15;
+                }
+
+                if (temp < 30)
+                {
+                    risk += 10;
+                }
+
+                else if (temp < 40)
+                {
+                    risk += 5;
+                }
+
+                //HUM
+                if (hum < 79)
+                {
+                    risk += 5;
+                }
+                if (hum > 80)
+                {
+                    risk += 10;
+                }
+
+                if (hum > 90)
+                {
+                    risk += 15;
+                }
+
+                else if (hum > 95)
+                {
+                    risk += 20;
+                }
+            }
+
+            return risk;
+        }";
+                writer.WriteLine(algorithm);
             }
         }
 

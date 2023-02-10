@@ -23,7 +23,6 @@ namespace WeatherData.Models
         public string Name { get; set; }
 
         void AvgValuesSearchDate();
-        //string MeteorologicalDate(int temp);
         void ShowTemperature();
         void ShowHumidity();
         void ShowMold();

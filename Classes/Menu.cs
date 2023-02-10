@@ -14,6 +14,7 @@ namespace WeatherData.Classes
     {
         private int SelectedIndex;
         private string[] Options;
+
         public Menu(string[] options)
         {
             Options = options;
@@ -49,25 +50,21 @@ namespace WeatherData.Classes
             {
                 case 0:
                     Console.Clear();
-                    //insideClass.Name.ViewBox(0);
                     insideClass.AvgValuesSearchDate();
                     Console.ReadKey();
                     break;
                 case 1:     
                     Console.Clear();
-                    //insideClass.Name.ViewBox(0);
                     insideClass.ShowTemperature();
                     Console.ReadKey();
                     break;
                 case 2:
                     Console.Clear();
-                    //insideClass.Name.ViewBox(0);
                     insideClass.ShowHumidity();
                     Console.ReadKey();
                     break;
                 case 3:
                     Console.Clear();
-                    //insideClass.Name.ViewBox(0);
                     insideClass.ShowMold();
                     Console.ReadKey();
                     break;
@@ -87,38 +84,34 @@ namespace WeatherData.Classes
             {
                 case 0:
                     Console.Clear();
-                    //outsideClass.Name.ViewBox(0);
                     outsideClass.AvgValuesSearchDate();
                     Console.ReadKey();
                     break;
                 case 1:
                     Console.Clear();
-                    //outsideClass.Name.ViewBox(0);
                     outsideClass.ShowTemperature();
                     Console.ReadKey();
                     break;
                 case 2:
                     Console.Clear();
-                    //outsideClass.Name.ViewBox(0);
                     outsideClass.ShowHumidity();
                     Console.ReadKey();
                     break;
                 case 3:
                     Console.Clear();
-                    //outsideClass.Name.ViewBox(0);
                     outsideClass.ShowMold();
                     Console.ReadKey();
                     break;
                 case 4:
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
+                    outsideClass.Name.ViewBox(0, "Fall");
                     resultFall = outsideClass.MeteorologicalDate(10);
                     Console.WriteLine(resultFall);
                     Console.ReadKey();
                     break;
                 case 5:
                     Console.Clear();
-                    outsideClass.Name.ViewBox(0);
+                    outsideClass.Name.ViewBox(0, "Winter");
                     resultWinter = outsideClass.MeteorologicalDate(0);
                     Console.WriteLine(resultWinter);
                     Console.ReadKey();
