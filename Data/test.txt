@@ -1,0 +1,37 @@
+---------------
+Avg Temperature
+---------------
+juni	Inside: 24.70	Outside: 15.85
+juli	Inside: 26.28	Outside: 20.24
+aug.	Inside: 25.57	Outside: 18.07
+sep.	Inside: 23.31	Outside: 16.16
+okt.	Inside: 22.42	Outside: 8.18
+nov.	Inside: 22.78	Outside: 3.31
+dec.	Inside: 21.84	Outside: 2.51
+
+------------
+Avg Humidity
+------------
+juni	Inside: 28.76	Outside: 53.21
+juli	Inside: 41.63	Outside: 52.99
+aug.	Inside: 34.60	Outside: 48.60
+sep.	Inside: 41.60	Outside: 60.43
+okt.	Inside: 27.27	Outside: 64.58
+nov.	Inside: 19.07	Outside: 83.49
+dec.	Inside: 15.82	Outside: 77.93
+
+---------------------------
+Avg Risk for mold per month
+---------------------------
+juni	Inside: 15.00	Outside: 32.44
+juli	Inside: 15.00	Outside: 22.63
+aug.	Inside: 15.00	Outside: 25.84
+sep.	Inside: 15.00	Outside: 27.59
+okt.	Inside: 15.01	Outside: 46.48
+nov.	Inside: 15.03	Outside: 57.87
+dec.	Inside: 15.69	Outside: 48.97
+
+------------------
+Meterological Fall
+------------------
+
