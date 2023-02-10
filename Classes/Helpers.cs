@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using WeatherData.Data;
+using WeatherData.Models;
 
 namespace WeatherData.Classes
 {
@@ -257,11 +258,26 @@ namespace WeatherData.Classes
                         "Outside: " + avgUteRisk.ToString("0.00", CultureInfo.InvariantCulture));
                 }
 
-                //HÄR ÄR JAG!!!!
+                Utomhus utomHus = new();
+                string resultWinter = utomHus.MeteorologicalDate(0);
+                string resultFall = utomHus.MeteorologicalDate(10);
                 writer.WriteLine("");
                 writer.WriteLine("------------------");
                 writer.WriteLine("Meterological Fall");
                 writer.WriteLine("------------------");
+                writer.WriteLine();
+                writer.WriteLine(resultFall);
+                writer.WriteLine("");
+                writer.WriteLine("--------------------");
+                writer.WriteLine("Meterological Winter");
+                writer.WriteLine("--------------------");
+                writer.WriteLine();
+                writer.WriteLine(resultWinter);
+
+                writer.WriteLine("");
+                writer.WriteLine("-----------------------------------");
+                writer.WriteLine("Algorithm for calculating Mold Risk");
+                writer.WriteLine("-----------------------------------");
                 writer.WriteLine();
 
             }

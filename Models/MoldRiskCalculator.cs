@@ -188,7 +188,7 @@ namespace WeatherData.Models
         //    return risk;
         //}
 
-        //public static Dictionary<DateTime, double> CreateDicForAutumn()
+        //public static Dictionary<DateTime, double> CreateDicForMeteorologicalDate()
         //{
         //    string filePath = "../../../Data/tempdata5-med fel.txt";
 

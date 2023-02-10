@@ -50,25 +50,25 @@ namespace WeatherData.Classes
                 case 0:
                     Console.Clear();
                     //insideClass.Name.ViewBox(0);
-                    insideClass.AvgValues();
+                    insideClass.AvgValuesSearchDate();
                     Console.ReadKey();
                     break;
                 case 1:     
                     Console.Clear();
                     //insideClass.Name.ViewBox(0);
-                    insideClass.ShowTemperature("Inne");
+                    insideClass.ShowTemperature();
                     Console.ReadKey();
                     break;
                 case 2:
                     Console.Clear();
                     //insideClass.Name.ViewBox(0);
-                    insideClass.ShowHumidity("Inne");
+                    insideClass.ShowHumidity();
                     Console.ReadKey();
                     break;
                 case 3:
                     Console.Clear();
                     //insideClass.Name.ViewBox(0);
-                    insideClass.ShowMold("Inne");
+                    insideClass.ShowMold();
                     Console.ReadKey();
                     break;
                 case 4:
@@ -80,43 +80,47 @@ namespace WeatherData.Classes
             var outsideMenuEnums = Enum.GetNames(typeof(Enums.OutsideMenu));
             Menu outsideMenu = new Menu(outsideMenuEnums);
             int selectedIndex = outsideMenu.Run();
+            string resultWinter = string.Empty;
+            string resultFall = string.Empty;
 
             switch (selectedIndex)
             {
                 case 0:
                     Console.Clear();
                     //outsideClass.Name.ViewBox(0);
-                    outsideClass.AvgValues();
+                    outsideClass.AvgValuesSearchDate();
                     Console.ReadKey();
                     break;
                 case 1:
                     Console.Clear();
                     //outsideClass.Name.ViewBox(0);
-                    outsideClass.ShowTemperature("Ute");
+                    outsideClass.ShowTemperature();
                     Console.ReadKey();
                     break;
                 case 2:
                     Console.Clear();
                     //outsideClass.Name.ViewBox(0);
-                    outsideClass.ShowHumidity("Ute");
+                    outsideClass.ShowHumidity();
                     Console.ReadKey();
                     break;
                 case 3:
                     Console.Clear();
                     //outsideClass.Name.ViewBox(0);
-                    outsideClass.ShowMold("Ute");
+                    outsideClass.ShowMold();
                     Console.ReadKey();
                     break;
                 case 4:
                     Console.Clear();
                     outsideClass.Name.ViewBox(0);
-                    outsideClass.MeteorologicalDate(10);
+                    resultFall = outsideClass.MeteorologicalDate(10);
+                    Console.WriteLine(resultFall);
                     Console.ReadKey();
                     break;
                 case 5:
                     Console.Clear();
                     outsideClass.Name.ViewBox(0);
-                    outsideClass.MeteorologicalDate(0);
+                    resultWinter = outsideClass.MeteorologicalDate(0);
+                    Console.WriteLine(resultWinter);
                     Console.ReadKey();
                     break;
                 case 6:
