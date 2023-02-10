@@ -60,8 +60,7 @@ namespace WeatherData.Classes
                 if (IsValidDate(input, out var inputDate))
                 {
                     Console.Clear();
-                    ("Valid date entered: ").ViewBox(0, inputDate.ToString("yyyy-MM-dd"));
-                    Thread.Sleep(1000);
+                    ("Date entered: ").ViewBox(0, inputDate.ToString("yyyy-MM-dd"));
 
                     return inputDate;
                 }
