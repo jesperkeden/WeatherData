@@ -114,7 +114,7 @@ namespace WeatherData.Models
                     // Calculate the average temperature for the current group of data by date
                     var avgTemp = dateGroup.Average(x => x.Temperature);
                     // Write the date and average temperature to the console
-                    Console.WriteLine("{0}\t{1:0.0}", dateGroup.Key.ToShortDateString(), avgTemp);
+                    Console.WriteLine("{0}\t{1:0.0}°C", dateGroup.Key.ToShortDateString(), avgTemp);
                 }
 
                 // Write a new line to the console
@@ -151,7 +151,7 @@ namespace WeatherData.Models
                     // Calculate the average humidity for the date group
                     var avgHum = dateGroup.Average(x => x.Humidity);
                     // Write the date and average humidity to the console
-                    Console.WriteLine("{0}\t{1:0.0}", dateGroup.Key.ToShortDateString(), avgHum);
+                    Console.WriteLine("{0}\t{1:0.0}%", dateGroup.Key.ToShortDateString(), avgHum);
                 }
 
                 Console.WriteLine();
