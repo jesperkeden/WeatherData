@@ -22,9 +22,9 @@ namespace WeatherData
         {
             Console.CursorVisible = false;
             bool runProgram = true;
-            //WriteFileDel delPrint = PrintToFile;
+            WriteFileDel delPrint = PrintToFile;
 
-            //delPrint();
+            delPrint();
             while (runProgram)
             {
                 List<iMeasurable> classList = Weather.CreateData();
