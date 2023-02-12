@@ -49,16 +49,16 @@ namespace WeatherData.Models
                 double dataAvgTemp = filteredData.Average(x => x.Temperature);
                 double dataAvgResult = filteredData.Average(x => x.Humidity);
 
+                Console.WriteLine("Chosen location: " + Location);
                 // Show the average temperature for the location "Inne"
                 if (Location == "Inne")
                 {
-                    Console.WriteLine("\nAverage temperature inside: " + Math.Round(dataAvgTemp, 2) + "°C");
+                    Console.WriteLine("\n\nAverage temperature: " + Math.Round(dataAvgTemp, 2) + "°C");
                 }
                 // Show the average temperature and humidity for the location "Ute"
                 else if (Location == "Ute")
                 {
-                    Console.WriteLine("\nAverage temperature outside: " + Math.Round(dataAvgTemp, 2) + "°C");
-                    Console.WriteLine(new String('-', 30));
+                    Console.WriteLine("\n\nAverage temperature: " + Math.Round(dataAvgTemp, 2) + "°C");
                     Console.WriteLine("Average humidity: " + Math.Round(dataAvgResult, 2) + "%");
                 }
                 else
