@@ -52,25 +52,21 @@ namespace WeatherData.Classes
                     Console.Clear();
                     insideClass.AvgValuesSearchDate();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 1:     
                     Console.Clear();
                     insideClass.ShowTemperature();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 2:
                     Console.Clear();
                     insideClass.ShowHumidity();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 3:
                     Console.Clear();
                     insideClass.ShowMold();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 4:
                     break;
@@ -90,25 +86,21 @@ namespace WeatherData.Classes
                     Console.Clear();
                     outsideClass.AvgValuesSearchDate();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 1:
                     Console.Clear();
                     outsideClass.ShowTemperature();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 2:
                     Console.Clear();
                     outsideClass.ShowHumidity();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 3:
                     Console.Clear();
                     outsideClass.ShowMold();
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 4:
                     Console.Clear();
@@ -116,7 +108,6 @@ namespace WeatherData.Classes
                     resultFall = outsideClass.MeteorologicalDate(10);
                     Console.WriteLine(resultFall);
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 5:
                     Console.Clear();
@@ -124,7 +115,6 @@ namespace WeatherData.Classes
                     resultWinter = outsideClass.MeteorologicalDate(0);
                     Console.WriteLine(resultWinter);
                     Console.ReadKey();
-                    Console.Clear();
                     break;
                 case 6:
                     break;

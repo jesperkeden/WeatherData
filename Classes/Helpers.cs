@@ -127,6 +127,7 @@ namespace WeatherData.Classes
                             }
                         }
                     }
+                    reader.Close();
                 }
             }
             catch (Exception ex)
